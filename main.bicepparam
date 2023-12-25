@@ -1,6 +1,5 @@
 using './main.bicep'
 
-param location = ''
 param vnetName = 'vnet-hub-qc-01'
 param vnetAddressPrefix = '10.0.0.0/22'
 param fwSubnetAddressPrefix = '10.0.0.0/26'
