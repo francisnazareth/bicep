@@ -20,7 +20,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   name: firewallPolicyName
   location: location
   properties: {
-    threatIntelMode: 'AlertAndDeny'
+    threatIntelMode: 'Deny'
   }
 }
 
