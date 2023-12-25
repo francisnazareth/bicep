@@ -115,10 +115,12 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
   }
 }
 
+var azureFirewallSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'AzureFirewallSubnet')
+
 var azureFirewallIpConfigurations = [{
   name: 'IpConf1'
   properties: {
-    subnet:  json('{"id": "${resourceId(vnetName, 'AzureFirewallSubnet')}"}')
+    subnet:  json('{"id": "${azureFirewallSubnetId}"}')
     publicIPAddress: {
       id: publicIpAddress.id
     }
