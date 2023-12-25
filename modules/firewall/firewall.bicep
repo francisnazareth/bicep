@@ -3,6 +3,9 @@ param firewallPublicIPName string
 param firewallPolicyName string
 param vnetName string
 param logAnalyticsWorkspaceId string
+param firewallName string
+@description('Zone numbers e.g. 1,2,3.')
+param availabilityZones array = []
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: firewallPublicIPName
@@ -16,10 +19,11 @@ resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   }
 }
 
+
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   name: firewallPolicyName
   location: location
-  
+
   properties: {
     sku: {
       tier: 'Premium'
@@ -108,5 +112,31 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
         ]
       }
     ]
+  }
+}
+
+var azureFirewallIpConfigurations = [{
+  name: 'IpConf1'
+  properties: {
+    subnet: resourceId(vnetName, 'AzureFirewallSubnet')
+    publicIPAddress: {
+      id: publicIpAddress.id
+    }
+  }
+}]
+
+resource firewall 'Microsoft.Network/azureFirewalls@2021-03-01' = {
+  name: firewallName
+  location: location
+  zones: ((length(availabilityZones) == 0) ? null : availabilityZones)
+  dependsOn: [
+    networkRuleCollectionGroup
+    applicationRuleCollectionGroup
+  ]
+  properties: {
+    ipConfigurations: azureFirewallIpConfigurations
+    firewallPolicy: {
+      id: firewallPolicy.id
+    }
   }
 }

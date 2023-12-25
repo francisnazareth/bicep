@@ -21,3 +21,5 @@ param ddosProtectionPlanName = 'moi-ddos-plan-hub-qc-01'
 param ddosProtectionPlanEnabled = true
 param firewallPublicIPName = 'pip-fw-hub-qc-01' 
 param firewallPolicyName = 'fw-policy-hub-qc-01'
+param firewallName = 'fw-moi-hub-qc-01'
+param availabilityZones = [1,2,3]

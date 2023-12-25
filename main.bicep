@@ -21,6 +21,8 @@ param ddosProtectionPlanName string
 param ddosProtectionPlanEnabled bool 
 param firewallPublicIPName string 
 param firewallPolicyName string 
+param firewallName string 
+param availabilityZones array 
 module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
   name: 'ddosProtectionPlan'
   params: {
@@ -79,5 +81,7 @@ module firewall './modules/firewall/firewall.bicep' = {
     firewallPublicIPName: firewallPublicIPName
     firewallPolicyName: firewallPolicyName
     logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
+    firewallName: firewallName,
+    availabilityZones: availabilityZones
   }
 }
