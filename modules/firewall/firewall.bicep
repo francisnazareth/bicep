@@ -134,11 +134,18 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-03-01' = {
   name: firewallName
   location: location
   zones: availabilityZones
+
+  
+  
   dependsOn: [
     networkRuleCollectionGroup
     applicationRuleCollectionGroup
   ]
   properties: {
+    sku: {
+      name: 'AZFW_VNet'
+      tier: 'Premium'
+    }
     ipConfigurations: azureFirewallIpConfigurations
     firewallPolicy: {
       id: firewallPolicy.id
