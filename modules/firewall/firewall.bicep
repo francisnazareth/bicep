@@ -119,7 +119,9 @@ var azureFirewallIpConfigurations = [{
   name: 'IpConf1'
   properties: {
     subnet:  json('{"id": "${resourceId(vnetName, 'AzureFirewallSubnet')}"}')
+    publicIPAddress: {
       id: publicIpAddress.id
+    }
   }
 }]
 
