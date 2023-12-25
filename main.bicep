@@ -85,3 +85,16 @@ module firewall './modules/firewall/firewall.bicep' = {
     availabilityZones: availabilityZones
   }
 }
+
+module vm './modules/vm/vm.bicep' = {
+  name: 'vm'
+  params: {
+    location: location
+    virtualNetworkName: vnetName
+    subnetName: sharedServicesSubnetName
+    vmName: 'winvm'
+    vmSize: 'Standard_D2s_v3'
+    adminUsername: 'adminuser'
+    adminPassword: 'P@ssw0rd123!'
+  }
+}
