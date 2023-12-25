@@ -13,6 +13,9 @@ param sharedServicesSubnetAddressPrefix string
 param bastionName string = 'bastion-hub-qc-01'
 param bastionPublicIPName string = 'bastion-hub-qc-01-ip'
 param bastionSku string = 'Standard'
+param logAnalyticsRetentionInDays int = 60
+param logAnalyticsWorkspaceName string = 'hub-qc-01-law'
+param logAnalyticsSku string = 'PerGB2018'
 
 module vnet './modules/vnet/vnet.bicep' = {
   name: 'vnet'
@@ -40,5 +43,15 @@ module bastion './modules/bastion/bastion.bicep' = {
     bastionName: bastionName
     bastionPublicIPName: bastionPublicIPName
     bastionSku: bastionSku
+  }
+}
+
+module logAnalytics './modules/logAnalytics/logAnalytics.bicep' = {
+  name: 'logAnalytics'
+  params: {
+    location: location
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+    logAnalyticsSku: logAnalyticsSku
+    logAnalyticsRetentionInDays: logAnalyticsRetentionInDays
   }
 }
