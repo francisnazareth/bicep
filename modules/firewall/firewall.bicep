@@ -36,6 +36,8 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   }
 }
 
+output firewallPolicyId string = firewallPolicy.id
+
 resource networkRuleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2022-01-01' = {
   parent: firewallPolicy
   name: 'DefaultNetworkRuleCollectionGroup'
