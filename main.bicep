@@ -10,12 +10,23 @@ param managementSubnetName string
 param managementSubnetAddressPrefix string
 param sharedServicesSubnetName string
 param sharedServicesSubnetAddressPrefix string
-param bastionName string = 'bastion-hub-qc-01'
-param bastionPublicIPName string = 'bastion-hub-qc-01-ip'
-param bastionSku string = 'Standard'
-param logAnalyticsRetentionInDays int = 60
-param logAnalyticsWorkspaceName string = 'hub-qc-01-law'
-param logAnalyticsSku string = 'PerGB2018'
+param bastionName string 
+param bastionPublicIPName string 
+param bastionSku string
+param logAnalyticsRetentionInDays int 
+param logAnalyticsWorkspaceName string 
+param logAnalyticsSku string
+param ddosProtectionPlanName string 
+@description('Enable DDoS protection plan.')
+param ddosProtectionPlanEnabled bool 
+module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
+  name: 'ddosProtectionPlan'
+  params: {
+    location: location
+    ddosProtectionPlanName: ddosProtectionPlanName
+   
+  }
+}
 
 module vnet './modules/vnet/vnet.bicep' = {
   name: 'vnet'
@@ -32,6 +43,8 @@ module vnet './modules/vnet/vnet.bicep' = {
     managementSubnetAddressPrefix: managementSubnetAddressPrefix
     sharedServicesSubnetName: sharedServicesSubnetName
     sharedServicesSubnetAddressPrefix: sharedServicesSubnetAddressPrefix
+    ddosProtectionPlanId: ddosProtectionPlan.outputs.ddosProtectionPlanId
+    ddosProtectionPlanEnabled: ddosProtectionPlanEnabled
   }
 }
 

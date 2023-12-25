@@ -11,4 +11,11 @@ param managementSubnetName = 'snet-management-hub-qc-01'
 param managementSubnetAddressPrefix = '10.0.0.192/28'
 param sharedServicesSubnetName = 'snet-sharedservices-hub-qc-01'
 param sharedServicesSubnetAddressPrefix = '10.0.0.208/28'
-
+param bastionName  = 'bastion-hub-qc-01'
+param bastionPublicIPName  = 'bastion-hub-qc-01-ip'
+param bastionSku  = 'Standard'
+param logAnalyticsRetentionInDays  = 60
+param logAnalyticsWorkspaceName  = 'hub-qc-01-law'
+param logAnalyticsSku = 'PerGB2018'
+param ddosProtectionPlanName = 'moi-ddos-plan-hub-qc-01'
+param ddosProtectionPlanEnabled = true

@@ -10,6 +10,8 @@ param managementSubnetName string
 param managementSubnetAddressPrefix string
 param sharedServicesSubnetName string
 param sharedServicesSubnetAddressPrefix string
+param ddosProtectionPlanId string
+param ddosProtectionPlanEnabled bool = true
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName
@@ -59,5 +61,10 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         }
       }
     ]
+
+    enableDdosProtection: ddosProtectionPlanEnabled
+    ddosProtectionPlan: {
+      id: ddosProtectionPlanId
+    }
   }
 }
