@@ -5,6 +5,11 @@ param bastionSubnetAddressPrefix string
 param location string = resourceGroup().location
 param appGwSubnetName string
 param appGwSubnetAddressPrefix string
+param vpnSubnetAddressPrefix string
+param managementSubnetName string
+param managementSubnetAddressPrefix string
+param sharedServicesSubnetName string
+param sharedServicesSubnetAddressPrefix string
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName
@@ -28,11 +33,29 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         properties: {
           addressPrefix: bastionSubnetAddressPrefix
         }
+      }      
+      {
+        name: 'GatewaySubnet'
+        properties: {
+          addressPrefix: vpnSubnetAddressPrefix
+        }
       }
       {
         name: appGwSubnetName
         properties: {
           addressPrefix: appGwSubnetAddressPrefix
+        }
+      }
+      {
+        name: managementSubnetName
+        properties: {
+          addressPrefix: managementSubnetAddressPrefix
+        }
+      }
+      {
+        name: sharedServicesSubnetName
+        properties: {
+          addressPrefix: sharedServicesSubnetAddressPrefix
         }
       }
     ]
