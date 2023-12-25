@@ -10,7 +10,9 @@ param managementSubnetName string
 param managementSubnetAddressPrefix string
 param sharedServicesSubnetName string
 param sharedServicesSubnetAddressPrefix string
-
+param bastionName string = 'bastion-hub-qc-01'
+param bastionPublicIPName string = 'bastion-hub-qc-01-ip'
+param bastionSku string = 'Standard'
 
 module vnet './modules/vnet/vnet.bicep' = {
   name: 'vnet'
@@ -27,5 +29,16 @@ module vnet './modules/vnet/vnet.bicep' = {
     managementSubnetAddressPrefix: managementSubnetAddressPrefix
     sharedServicesSubnetName: sharedServicesSubnetName
     sharedServicesSubnetAddressPrefix: sharedServicesSubnetAddressPrefix
+  }
+}
+
+module bastion './modules/bastion/bastion.bicep' = {
+  name: 'bastion'
+  params: {
+    location: location
+    vnetName: vnetName
+    bastionName: bastionName
+    bastionPublicIPName: bastionPublicIPName
+    bastionSku: bastionSku
   }
 }
