@@ -10,6 +10,7 @@ param availabilityZones array = []
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: firewallPublicIPName
   location: location
+  zones: availabilityZones
   sku: {
     name: 'Standard'
   }
