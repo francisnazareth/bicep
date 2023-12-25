@@ -19,6 +19,8 @@ param logAnalyticsSku string
 param ddosProtectionPlanName string 
 @description('Enable DDoS protection plan.')
 param ddosProtectionPlanEnabled bool 
+param firewallPublicIPName string 
+param firewallPolicyName string 
 module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
   name: 'ddosProtectionPlan'
   params: {
@@ -66,5 +68,16 @@ module logAnalytics './modules/logAnalytics/logAnalytics.bicep' = {
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     logAnalyticsSku: logAnalyticsSku
     logAnalyticsRetentionInDays: logAnalyticsRetentionInDays
+  }
+}
+
+module firewall './modules/firewall/firewall.bicep' = {
+  name: 'firewall'
+  params: {
+    location: location
+    vnetName: vnetName
+    firewallPublicIPName: firewallPublicIPName
+    firewallPolicyName: firewallPolicyName
+    logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
   }
 }
