@@ -19,8 +19,15 @@ resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   name: firewallPolicyName
   location: location
+  
   properties: {
+    sku: {
+      tier: 'Premium'
+    }
     threatIntelMode: 'Deny'
+    intrusionDetection: {
+      mode: 'Deny'
+    }
   }
 }
 
