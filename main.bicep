@@ -81,7 +81,7 @@ module firewall './modules/firewall/firewall.bicep' = {
     firewallPublicIPName: firewallPublicIPName
     firewallPolicyName: firewallPolicyName
     logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
-    firewallName: firewallName,
+    firewallName: firewallName
     availabilityZones: availabilityZones
   }
 }

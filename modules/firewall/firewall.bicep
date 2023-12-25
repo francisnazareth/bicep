@@ -118,8 +118,7 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
 var azureFirewallIpConfigurations = [{
   name: 'IpConf1'
   properties: {
-    subnet: resourceId(vnetName, 'AzureFirewallSubnet')
-    publicIPAddress: {
+    subnet:  json('{"id": "${resourceId(vnetName, 'AzureFirewallSubnet')}"}')
       id: publicIpAddress.id
     }
   }
@@ -128,7 +127,7 @@ var azureFirewallIpConfigurations = [{
 resource firewall 'Microsoft.Network/azureFirewalls@2021-03-01' = {
   name: firewallName
   location: location
-  zones: ((length(availabilityZones) == 0) ? null : availabilityZones)
+  zones: availabilityZones
   dependsOn: [
     networkRuleCollectionGroup
     applicationRuleCollectionGroup
