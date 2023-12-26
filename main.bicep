@@ -1,3 +1,5 @@
+targetScope = 'subscription'
+
 param location string = resourceGroup().location
 param vnetName string
 param vnetAddressPrefix string
@@ -29,8 +31,6 @@ param adminUsername string
 @secure()
 param adminPassword string
 param tagValues object
-
-targetScope = 'subscription'
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: 'rg-backup-moi-hub-qc-01'
