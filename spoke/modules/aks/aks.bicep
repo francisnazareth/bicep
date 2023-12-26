@@ -4,7 +4,7 @@ param tagValues object
 
 resource aksManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: aksManagedIdentityName
-  location: location
+  location: 'global'
   tags: tagValues
 }
 
