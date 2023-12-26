@@ -1,6 +1,6 @@
 targetScope = 'subscription'
 
-param location string = resourceGroup().location
+param location string = 'qatarcentral'
 param vnetName string
 param vnetAddressPrefix string
 param fwSubnetAddressPrefix string
