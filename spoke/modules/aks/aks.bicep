@@ -11,7 +11,7 @@ resource aksManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@20
 output aksManagedIdentityResourceId string = aksManagedIdentity.id
 
 resource privateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'privatelink.westeurope.azmk8s.io'
+  name: 'privatelink.qatarcentral.azmk8s.io'
   location: 'global'
   tags: tagValues
 }
