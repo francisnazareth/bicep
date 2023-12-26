@@ -1,7 +1,7 @@
 param location string
 param firewallPublicIPName string
 param firewallPolicyName string
-param vnetName string
+param firewallSubnetID string
 param firewallName string
 @description('Zone numbers e.g. 1,2,3.')
 param availabilityZones array = []
@@ -120,12 +120,10 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
   }
 }
 
-var azureFirewallSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'AzureFirewallSubnet')
-
 var azureFirewallIpConfigurations = [{
   name: 'IpConf1'
     properties: {
-    subnet:  json('{"id": "${azureFirewallSubnetId}"}')
+    subnet:  json('{"id": "${firewallSubnetID}"}')
     publicIPAddress: {
       id: publicIpAddress.id
     }

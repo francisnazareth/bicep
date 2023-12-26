@@ -69,6 +69,36 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       id: ddosProtectionPlanId
     }
   }
+
+  resource firewallSubnet 'subnets' existing = {
+      name: 'AzureFirewallSubnet'
+  }
+
+  resource bastionSubnet 'subnets' existing = {
+      name: 'AzureBastionSubnet'
+  }
+
+  resource vpnSubnet 'subnets' existing = {
+      name: 'GatewaySubnet'
+  }
+
+  resource appGwSubnet 'subnets' existing = {
+      name: appGwSubnetName
+  }
+
+  resource managementSubnet 'subnets' existing = {
+      name: managementSubnetName
+  }
+
+  resource sharedServicesSubnet 'subnets' existing = {
+      name: sharedServicesSubnetName
+  }
 }
 
 output vnetId string = vnet.id
+output firewallSubnetID string = vnet::firewallSubnet.id
+output bastionSubnetID string = vnet::bastionSubnet.id
+output vpnSubnetID string = vnet::vpnSubnet.id
+output appGwSubnetID string = vnet::appGwSubnet.id
+output managementSubnetID string = vnet::managementSubnet.id
+output sharedServicesSubnetID string = vnet::sharedServicesSubnet.id

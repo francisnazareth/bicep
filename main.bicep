@@ -31,33 +31,38 @@ param adminUsername string
 @secure()
 param adminPassword string
 param tagValues object
+param backupRGName string 
+param managementRGName string 
+param monitoringRGName string
+param networkRGName string
+param securityRGName string
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: 'rg-backup-moi-hub-qc-01'
+  name: backupRGName
   location: location
   tags: tagValues
 }
 
 resource managementRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: 'rg-management-moi-hub-qc-01'
+  name: managementRGName
   location: location
   tags: tagValues
 }
 
 resource monitoringRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: 'rg-monitoring-moi-hub-qc-01'
+  name: monitoringRGName
   location: location
   tags: tagValues
 }
 
 resource networkRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: 'rg-network-moi-hub-qc-01'
+  name: networkRGName
   location: location
   tags: tagValues
 }
 
 resource securityRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: 'rg-security-moi-hub-qc-01'
+  name: securityRGName
   location: location
   tags: tagValues
 }
@@ -99,7 +104,7 @@ module bastion './modules/bastion/bastion.bicep' = {
   scope: managementRG
   params: {
     location: location
-    vnetName: vnetName
+    bastionSubnetID: vnet.outputs.bastionSubnetID
     bastionName: bastionName
     bastionPublicIPName: bastionPublicIPName
     bastionSku: bastionSku
@@ -125,7 +130,7 @@ module firewall './modules/firewall/firewall.bicep' = {
   params: {
     location: location
     tagValues: tagValues
-    vnetName: vnetName
+    firewallSubnetID: vnet.outputs.firewallSubnetID
     firewallPublicIPName: firewallPublicIPName
     firewallPolicyName: firewallPolicyName
     firewallName: firewallName
@@ -138,8 +143,8 @@ module vm './modules/vm/vm.bicep' = {
   scope: managementRG
   params: {
     location: location
-    virtualNetworkName: vnetName
-    subnetName: managementSubnetName
+    tagValues: tagValues
+    managementSubnetID: vnet.outputs.managementSubnetID
     vmName: vmName
     vmSize: vmSize
     adminUsername: adminUsername

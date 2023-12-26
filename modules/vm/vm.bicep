@@ -1,12 +1,13 @@
 param location string
 param vmName string
-param virtualNetworkName string
-param subnetName string
+param managementSubnetID string
 param vmSize string
 param adminUsername string
 @secure()
 param adminPassword string
 param vmCount int = 3
+param tagValues object 
+
 
 @description('The Windows version for the VM. This will pick a fully patched image of this given Windows version.')
 @allowed([
@@ -39,6 +40,7 @@ param OSVersion string = '2022-datacenter-azure-edition'
 resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in range(0, vmCount): {
   name: '${vmName}-nic-${i}'
   location: location
+  tags: tagValues
   properties: {
     ipConfigurations: [
       {
@@ -46,7 +48,7 @@ resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in rang
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
+            id: managementSubnetID
           }
         }
       }
@@ -57,6 +59,7 @@ resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in rang
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = [for i in range(0, vmCount): {
   name: '${vmName}${i}'
   location: location
+  tags: tagValues
   properties: {
     hardwareProfile: {
       vmSize: vmSize

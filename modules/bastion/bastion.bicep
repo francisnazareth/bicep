@@ -1,7 +1,7 @@
 param location string
 param bastionPublicIPName string
 param bastionName string
-param vnetName string
+param bastionSubnetID string
 param bastionSku string
 param tagValues object
 
@@ -40,7 +40,7 @@ resource bastion 'Microsoft.Network/bastionHosts@2023-04-01' = {
             id: resourceId('Microsoft.Network/publicIPAddresses', bastionPublicIPName)
           }
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'AzureBastionSubnet')
+            id: bastionSubnetID
           }
         }
       }
