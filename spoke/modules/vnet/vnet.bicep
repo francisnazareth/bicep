@@ -6,6 +6,7 @@ param aksSubnetAddressPrefix string
 param peSubnetName string
 param peSubnetAddressPrefix string
 param tagValues object
+param aksRouteTableID string
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName
@@ -23,6 +24,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: aksSubnetName
         properties: {
           addressPrefix: aksSubnetAddressPrefix
+          routeTable: {
+            id: aksRouteTableID
+          }
         }
       }
       {

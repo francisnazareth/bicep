@@ -3,7 +3,7 @@ param routeTableName string
 param tagValues object
 param firewallPrivateIP string
 
-resource symbolicname 'Microsoft.Network/routeTables@2023-04-01' = {
+resource routeTable 'Microsoft.Network/routeTables@2023-04-01' = {
   name: routeTableName
   location: location
   tags: tagValues
@@ -22,3 +22,5 @@ resource symbolicname 'Microsoft.Network/routeTables@2023-04-01' = {
     ]
   }
 }
+
+output routeTableId string = routeTable.id
