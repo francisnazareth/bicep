@@ -7,6 +7,8 @@ param peSubnetName string
 param peSubnetAddressPrefix string
 param tagValues object
 param aksRouteTableID string
+param aksManagedIdentityID string
+param aksManagedIdentityPrincipalID string
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName
@@ -50,3 +52,19 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
 output vnetId string = vnet.id
 output aksSubnetID string = vnet::aksSubnet.id
 output peSubnetID string = vnet::peSubnet.id
+
+
+resource networkContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  scope: resourceGroup()
+  name: '4d97b98b-1d4f-4787-a291-c67834d212e7'
+}
+
+resource vnetContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, aksManagedIdentityID, networkContributorRoleDefinition.id)
+  scope: vnet
+  properties: {
+    roleDefinitionId: networkContributorRoleDefinition.id
+    principalId: aksManagedIdentityPrincipalID
+    principalType: 'ServicePrincipal'
+  }
+}

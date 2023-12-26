@@ -19,12 +19,31 @@ resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
   tags: tagValues
 }
-
+module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
+  name: 'managedIdentity'
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    aksManagedIdentityName: aksManagedIdentityName
+  }
+}
+module aksRouteTable './modules/routeTable/routeTable.bicep' = {
+  name: 'routeTable'
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    routeTableName: aksRouteTableName
+    firewallPrivateIP: firewallPrivateIP
+  }
+}
 module vnet './modules/vnet/vnet.bicep' = {
   name: 'vnet'
   scope: spokeRG
   dependsOn: [
     aksRouteTable
+    managedIdentity
   ]
   params: {
     tagValues: tagValues
@@ -36,17 +55,8 @@ module vnet './modules/vnet/vnet.bicep' = {
     peSubnetName: peSubnetName
     peSubnetAddressPrefix: peSubnetAddressPrefix
     aksRouteTableID: aksRouteTable.outputs.routeTableId
-  }
-}
-
-module aksRouteTable './modules/routeTable/routeTable.bicep' = {
-  name: 'routeTable'
-  scope: spokeRG
-  params: {
-    tagValues: tagValues
-    location: location
-    routeTableName: aksRouteTableName
-    firewallPrivateIP: firewallPrivateIP
+    aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
+    aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
   }
 }
 
@@ -55,10 +65,11 @@ module aks './modules/aks/aks.bicep' = {
   scope: spokeRG
   dependsOn: [
     vnet
+    managedIdentity
   ]
   params: {
     tagValues: tagValues
-    location: location
-    aksManagedIdentityName: aksManagedIdentityName
+    aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
+    aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
   }
 }

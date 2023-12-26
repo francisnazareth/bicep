@@ -1,14 +1,6 @@
-param aksManagedIdentityName string
-param location string
 param tagValues object
-
-resource aksManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: aksManagedIdentityName
-  location: location
-  tags: tagValues
-}
-
-output aksManagedIdentityResourceId string = aksManagedIdentity.id
+param aksManagedIdentityID string
+param aksManagedIdentityPrincipalID string
 
 resource privateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.qatarcentral.azmk8s.io'
@@ -28,21 +20,21 @@ resource privateDNSZoneContributorRoleDefinition 'Microsoft.Authorization/roleDe
 }
 
 resource rgContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(resourceGroup().id, aksManagedIdentity.id, contributorRoleDefinition.id)
+  name: guid(resourceGroup().id, aksManagedIdentityID, contributorRoleDefinition.id)
   scope: resourceGroup()
   properties: {
     roleDefinitionId: contributorRoleDefinition.id
-    principalId: aksManagedIdentity.properties.principalId
+    principalId: aksManagedIdentityPrincipalID
     principalType: 'ServicePrincipal'
   }
 }
 
-resource vnetContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(resourceGroup().id, aksManagedIdentity.id, privateDNSZoneContributorRoleDefinition.id)
+resource privateDNSZoneContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, aksManagedIdentityID, privateDNSZoneContributorRoleDefinition.id)
   scope: privateDNSZone
   properties: {
     roleDefinitionId: privateDNSZoneContributorRoleDefinition.id
-    principalId: aksManagedIdentity.properties.principalId
+    principalId: aksManagedIdentityPrincipalID
     principalType: 'ServicePrincipal'
   }
 }
