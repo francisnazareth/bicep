@@ -91,7 +91,6 @@ module firewall './modules/firewall/firewall.bicep' = {
     vnetName: vnetName
     firewallPublicIPName: firewallPublicIPName
     firewallPolicyName: firewallPolicyName
-    logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
     firewallName: firewallName
     availabilityZones: availabilityZones
   }
@@ -102,7 +101,7 @@ module vm './modules/vm/vm.bicep' = {
   params: {
     location: location
     virtualNetworkName: vnetName
-    subnetName: sharedServicesSubnetName
+    subnetName: managementSubnetName
     vmName: vmName
     vmSize: vmSize
     adminUsername: adminUsername
