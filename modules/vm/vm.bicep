@@ -6,6 +6,7 @@ param vmSize string
 param adminUsername string
 @secure()
 param adminPassword string
+param vmCount int = 3
 
 @description('The Windows version for the VM. This will pick a fully patched image of this given Windows version.')
 @allowed([
@@ -35,8 +36,8 @@ param adminPassword string
 ])
 param OSVersion string = '2022-datacenter-azure-edition'
 
-resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = {
-  name: '${vmName}-nic-01'
+resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in range(0, vmCount): {
+  name: '${vmName}-nic-${i}'
   location: location
   properties: {
     ipConfigurations: [
@@ -51,17 +52,17 @@ resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = {
       }
     ]
   }
-}
+}]
 
-resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
-  name: vmName
+resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = [for i in range(0, vmCount): {
+  name: '${vmName}${i}'
   location: location
   properties: {
     hardwareProfile: {
       vmSize: vmSize
     }
     osProfile: {
-      computerName: vmName
+      computerName: '${vmName}${i}'
       adminUsername: adminUsername
       adminPassword: adminPassword
     }
@@ -89,7 +90,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: vmNic.id
+          id: vmNic[i].id
         }
       ]
     }
@@ -99,5 +100,5 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
       }
     }
   }
-}
+}]
 
