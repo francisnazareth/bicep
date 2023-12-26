@@ -10,6 +10,8 @@ param aksSubnetName string
 param aksSubnetAddressPrefix string
 param peSubnetName string
 param peSubnetAddressPrefix string
+param routeTableName string
+param firewallPrivateIP string
 
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
@@ -29,5 +31,16 @@ module vnet './modules/vnet/vnet.bicep' = {
     aksSubnetAddressPrefix: aksSubnetAddressPrefix
     peSubnetName: peSubnetName
     peSubnetAddressPrefix: peSubnetAddressPrefix
+  }
+}
+
+module routeTable './modules/routeTable/routeTable.bicep' = {
+  name: 'routeTable'
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    routeTableName: routeTableName
+    firewallPrivateIP: firewallPrivateIP
   }
 }
