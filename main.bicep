@@ -35,7 +35,6 @@ param backupRGName string
 param managementRGName string 
 param monitoringRGName string
 param networkRGName string
-param securityRGName string
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
@@ -60,16 +59,9 @@ resource networkRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
   tags: tagValues
 }
-
-resource securityRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: securityRGName
-  location: location
-  tags: tagValues
-}
-
 module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
   name: 'ddosProtectionPlan'
-  scope: securityRG
+  scope: networkRG
   params: {
     location: location
     ddosProtectionPlanName: ddosProtectionPlanName
