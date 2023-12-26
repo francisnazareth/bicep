@@ -126,7 +126,7 @@ module logAnalytics './modules/logAnalytics/logAnalytics.bicep' = {
 
 module firewall './modules/firewall/firewall.bicep' = {
   name: 'firewall'
-  scope: securityRG
+  scope: networkRG
   params: {
     location: location
     tagValues: tagValues
