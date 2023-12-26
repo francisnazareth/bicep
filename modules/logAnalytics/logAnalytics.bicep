@@ -3,6 +3,8 @@ param location string = resourceGroup().location
 @description('Specifies the name of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceName string
 
+param tagValues object
+
 @allowed([
   'Free'
   'Standalone'
@@ -19,6 +21,7 @@ param logAnalyticsRetentionInDays int = 60
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
   name: logAnalyticsWorkspaceName
   location: location
+  tags: tagValues
   properties: {
     sku: {
       name: logAnalyticsSku

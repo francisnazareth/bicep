@@ -23,12 +23,19 @@ param firewallPublicIPName string
 param firewallPolicyName string 
 param firewallName string 
 param availabilityZones array 
+param vmName string
+param vmSize string
+param adminUsername string
+@secure()
+param adminPassword string
+param tagValues object
+
 module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
   name: 'ddosProtectionPlan'
   params: {
     location: location
     ddosProtectionPlanName: ddosProtectionPlanName
-   
+    tagValues: tagValues
   }
 }
 
@@ -49,6 +56,7 @@ module vnet './modules/vnet/vnet.bicep' = {
     sharedServicesSubnetAddressPrefix: sharedServicesSubnetAddressPrefix
     ddosProtectionPlanId: ddosProtectionPlan.outputs.ddosProtectionPlanId
     ddosProtectionPlanEnabled: ddosProtectionPlanEnabled
+    tagValues: tagValues
   }
 }
 
@@ -60,6 +68,7 @@ module bastion './modules/bastion/bastion.bicep' = {
     bastionName: bastionName
     bastionPublicIPName: bastionPublicIPName
     bastionSku: bastionSku
+    tagValues: tagValues
   }
 }
 
@@ -67,6 +76,7 @@ module logAnalytics './modules/logAnalytics/logAnalytics.bicep' = {
   name: 'logAnalytics'
   params: {
     location: location
+    tagValues: tagValues
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     logAnalyticsSku: logAnalyticsSku
     logAnalyticsRetentionInDays: logAnalyticsRetentionInDays
@@ -77,6 +87,7 @@ module firewall './modules/firewall/firewall.bicep' = {
   name: 'firewall'
   params: {
     location: location
+    tagValues: tagValues
     vnetName: vnetName
     firewallPublicIPName: firewallPublicIPName
     firewallPolicyName: firewallPolicyName
@@ -92,9 +103,9 @@ module vm './modules/vm/vm.bicep' = {
     location: location
     virtualNetworkName: vnetName
     subnetName: sharedServicesSubnetName
-    vmName: 'winvm'
-    vmSize: 'Standard_D2s_v3'
-    adminUsername: 'adminuser'
-    adminPassword: 'P@ssw0rd123!'
+    vmName: vmName
+    vmSize: vmSize
+    adminUsername: adminUsername
+    adminPassword: adminPassword
   }
 }

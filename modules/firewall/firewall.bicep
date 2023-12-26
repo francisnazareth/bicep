@@ -2,15 +2,16 @@ param location string
 param firewallPublicIPName string
 param firewallPolicyName string
 param vnetName string
-param logAnalyticsWorkspaceId string
 param firewallName string
 @description('Zone numbers e.g. 1,2,3.')
 param availabilityZones array = []
+param tagValues object
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: firewallPublicIPName
   location: location
   zones: availabilityZones
+  tags: tagValues
   sku: {
     name: 'Standard'
   }
@@ -24,6 +25,7 @@ resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   name: firewallPolicyName
   location: location
+  tags: tagValues
 
   properties: {
     sku: {
@@ -122,7 +124,7 @@ var azureFirewallSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnet
 
 var azureFirewallIpConfigurations = [{
   name: 'IpConf1'
-  properties: {
+    properties: {
     subnet:  json('{"id": "${azureFirewallSubnetId}"}')
     publicIPAddress: {
       id: publicIpAddress.id
@@ -134,9 +136,8 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-03-01' = {
   name: firewallName
   location: location
   zones: availabilityZones
+  tags: tagValues
 
-  
-  
   dependsOn: [
     networkRuleCollectionGroup
     applicationRuleCollectionGroup

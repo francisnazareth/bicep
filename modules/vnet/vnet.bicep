@@ -12,10 +12,12 @@ param sharedServicesSubnetName string
 param sharedServicesSubnetAddressPrefix string
 param ddosProtectionPlanId string
 param ddosProtectionPlanEnabled bool = true
+param tagValues object
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName
   location: location
+  tags: tagValues
   properties: {
     addressSpace: {
       addressPrefixes: [
