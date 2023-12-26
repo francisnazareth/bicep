@@ -30,8 +30,41 @@ param adminUsername string
 param adminPassword string
 param tagValues object
 
+targetScope = 'subscription'
+
+resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'rg-backup-moi-hub-qc-01'
+  location: location
+  tags: tagValues
+}
+
+resource managementRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'rg-management-moi-hub-qc-01'
+  location: location
+  tags: tagValues
+}
+
+resource monitoringRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'rg-monitoring-moi-hub-qc-01'
+  location: location
+  tags: tagValues
+}
+
+resource networkRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'rg-network-moi-hub-qc-01'
+  location: location
+  tags: tagValues
+}
+
+resource securityRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'rg-security-moi-hub-qc-01'
+  location: location
+  tags: tagValues
+}
+
 module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
   name: 'ddosProtectionPlan'
+  scope: securityRG
   params: {
     location: location
     ddosProtectionPlanName: ddosProtectionPlanName
@@ -41,6 +74,7 @@ module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
 
 module vnet './modules/vnet/vnet.bicep' = {
   name: 'vnet'
+  scope: networkRG
   params: {
     vnetName: vnetName
     location: location
@@ -62,6 +96,7 @@ module vnet './modules/vnet/vnet.bicep' = {
 
 module bastion './modules/bastion/bastion.bicep' = {
   name: 'bastion'
+  scope: managementRG
   params: {
     location: location
     vnetName: vnetName
@@ -74,6 +109,7 @@ module bastion './modules/bastion/bastion.bicep' = {
 
 module logAnalytics './modules/logAnalytics/logAnalytics.bicep' = {
   name: 'logAnalytics'
+  scope: monitoringRG
   params: {
     location: location
     tagValues: tagValues
@@ -85,6 +121,7 @@ module logAnalytics './modules/logAnalytics/logAnalytics.bicep' = {
 
 module firewall './modules/firewall/firewall.bicep' = {
   name: 'firewall'
+  scope: securityRG
   params: {
     location: location
     tagValues: tagValues
@@ -98,6 +135,7 @@ module firewall './modules/firewall/firewall.bicep' = {
 
 module vm './modules/vm/vm.bicep' = {
   name: 'vm'
+  scope: managementRG
   params: {
     location: location
     virtualNetworkName: vnetName
