@@ -72,7 +72,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
     dnsPrefix: dnsPrefix
     apiServerAccessProfile:{
       enablePrivateCluster: true
-      enableVnetIntegration: true
+      enableVnetIntegration: false
       privateDNSZone: privateDNSZone.id
       subnetId: aksSubnetID
     }
