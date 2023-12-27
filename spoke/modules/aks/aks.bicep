@@ -63,6 +63,8 @@ param aksSubnetID string
 resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   name: clusterName
   location: location
+  tags: tagValues
+
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities:{
@@ -79,7 +81,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
       serviceCidr: '10.8.0.10'
       dockerBridgeCidr: '10.8.0.1/24'
       outboundType: 'userDefinedRouting'
-      vnetSubnetId: aksSubnetID
     }
 
     apiServerAccessProfile:{
@@ -93,9 +94,13 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
         name: 'agentpool'
         osDiskSizeGB: osDiskSizeGB
         count: agentCount
+        minCount: 3
+        maxCount: 6
+        maxPods: 50
         vmSize: agentVMSize
         osType: 'Linux'
         mode: 'System'
+        vnetSubnetID: aksSubnetID
       }
     ]
   }
