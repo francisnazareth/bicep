@@ -29,6 +29,10 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   tags: tagValues
 
   properties: {
+    dnsSettings: {
+      enableProxy: true
+    }
+
     sku: {
       tier: 'Premium'
     }
