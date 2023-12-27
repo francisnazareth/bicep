@@ -77,9 +77,8 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
       loadBalancerSku: 'Standard'
       networkPlugin: 'azure'
       networkPolicy: 'azure'
-      podCidr: '10.8.0.0/24'
-      serviceCidr: '10.8.0.10'
-      dockerBridgeCidr: '10.8.0.1/24'
+      serviceCidr: '10.8.0.0/24'
+      dnsServiceIP: '10.8.0.10'
       outboundType: 'userDefinedRouting'
     }
 
