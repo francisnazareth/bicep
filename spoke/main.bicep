@@ -71,5 +71,7 @@ module aks './modules/aks/aks.bicep' = {
     tagValues: tagValues
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
+    location: location
+    aksSubnetID: vnet.outputs.aksSubnetID
   }
 }
