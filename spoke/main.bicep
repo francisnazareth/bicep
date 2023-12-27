@@ -15,6 +15,14 @@ param firewallPrivateIP string
 param aksManagedIdentityName string
 param aksAPISubnetName string
 param aksAPISubnetAddressPrefix string
+param agentVMSize string
+param aksClusterName string 
+param aksSystemNodeCount int = 3
+param aksSystemNodeMinCount int = 3
+param aksSystemNodeMaxCount int = 6
+param aksSystemNodepoolMaxPods int = 30
+param logAnalyticsWorkspaceID string 
+
 
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
@@ -78,5 +86,12 @@ module aks './modules/aks/aks.bicep' = {
     location: location
     aksAPISubnetID: vnet.outputs.aksAPISubnetID
     aksSubnetID: vnet.outputs.aksSubnetID
+    aksClusterName: aksClusterName
+    agentVMSize: agentVMSize
+    aksSystemNodeCount: aksSystemNodeCount
+    aksSystemNodeMinCount: aksSystemNodeMinCount
+    aksSystemNodeMaxCount: aksSystemNodeMaxCount
+    aksSystemNodepoolMaxPods: aksSystemNodepoolMaxPods
+    logAnalyticsWorkspaceID: logAnalyticsWorkspaceID
   }
 }
