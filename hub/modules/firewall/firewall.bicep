@@ -163,8 +163,6 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
                 port: 80
               }
             ]
-            }
-            ]
             fqdnTags: [
               'AzureKubernetesService'
             ]
