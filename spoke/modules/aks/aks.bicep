@@ -96,7 +96,8 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
         count: agentCount
         minCount: 3
         maxCount: 6
-        maxPods: 50
+        maxPods: 30
+        enableAutoScaling: true
         vmSize: agentVMSize
         osType: 'Linux'
         mode: 'System'
