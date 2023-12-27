@@ -86,6 +86,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
       enablePrivateCluster: true
       enableVnetIntegration: true
       privateDNSZone: privateDNSZone.id
+      subnetId: aksAPISubnetID
     }
 
     agentPoolProfiles: [
