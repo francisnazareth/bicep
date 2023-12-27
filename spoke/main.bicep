@@ -77,5 +77,6 @@ module aks './modules/aks/aks.bicep' = {
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
     location: location
     aksAPISubnetID: vnet.outputs.aksAPISubnetID
+    aksSubnetID: vnet.outputs.aksSubnetID
   }
 }

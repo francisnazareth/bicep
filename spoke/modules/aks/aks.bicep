@@ -58,6 +58,7 @@ param agentVMSize string = 'standard_d2s_v3'
 param clusterName string = 'aks-moi-poc-qc-01'
 param dnsPrefix string = 'aks-moi-poc-qc-01'
 param aksAPISubnetID string
+param aksSubnetID string
 
 resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   name: clusterName
@@ -70,6 +71,17 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   }
   properties: {
     dnsPrefix: dnsPrefix
+    networkProfile:{
+      loadBalancerSku: 'Standard'
+      networkPlugin: 'azure'
+      networkPolicy: 'azure'
+      podCidr: '10.8.0.0/24'
+      serviceCidr: '10.8.0.10'
+      dockerBridgeCidr: '10.8.0.1/24'
+      outboundType: 'userDefinedRouting'
+      vnetSubnetId: aksSubnetID
+    }
+
     apiServerAccessProfile:{
       enablePrivateCluster: true
       enableVnetIntegration: true
