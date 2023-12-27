@@ -62,9 +62,6 @@ resource privateDNSZoneContributorRoleAssignment 'Microsoft.Authorization/roleAs
   }
 }
 
-
-
-
 resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   name: aksClusterName
   location: location
@@ -108,7 +105,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
     networkProfile:{
       loadBalancerSku: 'Standard'
       networkPlugin: 'azure'
-      networkPolicy: 'azure'
+      networkPolicy: 'calico'
       serviceCidr: '10.8.0.0/24'
       dnsServiceIP: '10.8.0.10'
       outboundType: 'userDefinedRouting'
@@ -130,6 +127,11 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
         maxCount: aksSystemNodeMaxCount
         maxPods: aksSystemNodepoolMaxPods
         enableAutoScaling: true
+        availabilityZones: [
+          '1'
+          '2'
+          '3'
+        ]
         vmSize: agentVMSize
         osType: 'Linux'
         mode: 'System'
