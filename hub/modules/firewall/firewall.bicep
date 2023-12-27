@@ -6,6 +6,7 @@ param firewallName string
 @description('Zone numbers e.g. 1,2,3.')
 param availabilityZones array = []
 param tagValues object
+param aksSubnetRange array = ['10.0.4.0/23', '10.0.6.0/28']
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: firewallPublicIPName
@@ -51,23 +52,79 @@ resource networkRuleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleColl
         action: {
           type: 'Allow'
         }
-        name: 'azure-global-services-nrc'
+        name: 'aks-cluster-network-rule-collection'
         priority: 1250
         rules: [
           {
             ruleType: 'NetworkRule'
-            name: 'time-windows'
+            name: 'aks-api-udp-rule'
             ipProtocols: [
               'UDP'
             ]
             destinationAddresses: [
-              '13.86.101.172'
+              'AzureCloud.QatarCentral'
             ]
-            sourceAddresses: [
-             '13.86.101.173'
+            sourceAddresses: aksSubnetRange
+            destinationPorts: [
+              '1194'
             ]
+          }
+          {
+            ruleType: 'NetworkRule'
+            name: 'aks-api-tcp-rule'
+            ipProtocols: [
+              'TCP'
+            ]
+            destinationAddresses: [
+              'AzureCloud.QatarCentral'
+            ]
+            sourceAddresses: aksSubnetRange
+            destinationPorts: [
+              '9000'
+            ]
+          }
+          {
+            ruleType: 'NetworkRule'
+            name: 'time-server-udp-rule'
+            ipProtocols: [
+              'UDP'
+            ]
+            destinationFqdns: [
+              'ntp.ubuntu.com'
+            ]
+            sourceAddresses: aksSubnetRange
             destinationPorts: [
               '123'
+            ]
+          }
+          {
+            ruleType: 'NetworkRule'
+            name: 'gchr-tcp-rule'
+            ipProtocols: [
+              'TCP'
+            ]
+            destinationFqdns: [
+              'gcr.io'
+            ]
+            sourceAddresses: aksSubnetRange
+            destinationPorts: [
+              '443'
+            ]
+          }
+          {
+            ruleType: 'NetworkRule'
+            name: 'dockerhub-tcp-rule'
+            ipProtocols: [
+              'TCP'
+            ]
+            destinationFqdns: [
+              'registry-1.docker.io'
+              'docker.io'
+              'production.cloudflare.docker.com'
+            ]
+            sourceAddresses: aksSubnetRange
+            destinationPorts: [
+              '443'
             ]
           }
         ]
@@ -87,7 +144,7 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
     ruleCollections: [
       {
         ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
-        name: 'global-rule-url-arc'
+        name: 'aks-cluster-application-rules'
         priority: 1000
         action: {
           type: 'Allow'
@@ -95,7 +152,7 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
         rules: [
           {
             ruleType: 'ApplicationRule'
-            name: 'winupdate-rule-01'
+            name: 'aks-application-rule-01'
             protocols: [
               {
                 protocolType: 'Https'
@@ -106,13 +163,13 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
                 port: 80
               }
             ]
+            }
+            ]
             fqdnTags: [
-              'WindowsUpdate'
+              'AzureKubernetesService'
             ]
             terminateTLS: false
-            sourceAddresses: [
-              '10.1.2.3'
-            ]
+            sourceAddresses: aksSubnetRange
           }
         ]
       }
