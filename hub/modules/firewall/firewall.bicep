@@ -6,7 +6,7 @@ param firewallName string
 @description('Zone numbers e.g. 1,2,3.')
 param availabilityZones array = []
 param tagValues object
-param aksSubnetRange array = ['10.0.4.0/23', '10.0.6.0/28']
+param aksSubnetRange array = ['10.0.4.0/23','10.0.6.0/28']
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: firewallPublicIPName
@@ -66,7 +66,7 @@ resource networkRuleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleColl
               'UDP'
             ]
             destinationAddresses: [
-              'AzureCloud.QatarCentral'
+              'AzureCloud.qatarcentral'
             ]
             sourceAddresses: aksSubnetRange
             destinationPorts: [
@@ -80,7 +80,7 @@ resource networkRuleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleColl
               'TCP'
             ]
             destinationAddresses: [
-              'AzureCloud.QatarCentral'
+              'AzureCloud.qatarcentral'
             ]
             sourceAddresses: aksSubnetRange
             destinationPorts: [
