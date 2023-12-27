@@ -57,7 +57,7 @@ param agentVMSize string = 'standard_d2s_v3'
 
 param clusterName string = 'aks-moi-poc-qc-01'
 param dnsPrefix string = 'aks-moi-poc-qc-01'
-param aksSubnetID string
+param aksAPISubnetID string
 
 resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   name: clusterName
@@ -74,7 +74,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
       enablePrivateCluster: true
       enableVnetIntegration: true
       privateDNSZone: privateDNSZone.id
-      subnetId: aksSubnetID
+      subnetId: aksAPISubnetID
     }
     agentPoolProfiles: [
       {

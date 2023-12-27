@@ -13,6 +13,8 @@ param peSubnetAddressPrefix string
 param aksRouteTableName string
 param firewallPrivateIP string
 param aksManagedIdentityName string
+param aksAPISubnetName string
+param aksAPISubnetAddressPrefix string
 
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
@@ -54,6 +56,8 @@ module vnet './modules/vnet/vnet.bicep' = {
     aksSubnetAddressPrefix: aksSubnetAddressPrefix
     peSubnetName: peSubnetName
     peSubnetAddressPrefix: peSubnetAddressPrefix
+    aksAPISubnetName: aksAPISubnetName
+    aksAPISubnetAddressPrefix: aksAPISubnetAddressPrefix
     aksRouteTableID: aksRouteTable.outputs.routeTableId
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
@@ -72,6 +76,6 @@ module aks './modules/aks/aks.bicep' = {
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
     location: location
-    aksSubnetID: vnet.outputs.aksSubnetID
+    aksAPISubnetID: vnet.outputs.aksAPISubnetID
   }
 }

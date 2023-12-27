@@ -9,6 +9,9 @@ param tagValues object
 param aksRouteTableID string
 param aksManagedIdentityID string
 param aksManagedIdentityPrincipalID string
+param aksAPISubnetName string
+param aksAPISubnetAddressPrefix string
+
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName
@@ -32,6 +35,12 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         }
       }
       {
+        name: aksAPISubnetName
+        properties: {
+          addressPrefix: aksAPISubnetAddressPrefix
+        }
+      }
+      {
         name: peSubnetName
         properties: {
           addressPrefix: peSubnetAddressPrefix
@@ -47,12 +56,16 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   resource peSubnet 'subnets' existing = {
       name: peSubnetName
   }
+
+  resource aksApiSubnet 'subnets' existing = {
+    name: aksAPISubnetName
+  }
 }
 
 output vnetId string = vnet.id
 output aksSubnetID string = vnet::aksSubnet.id
 output peSubnetID string = vnet::peSubnet.id
-
+output aksAPISubnetID string = vnet::aksApiSubnet.id
 
 resource networkContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: resourceGroup()
