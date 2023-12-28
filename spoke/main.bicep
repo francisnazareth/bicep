@@ -124,6 +124,7 @@ module storage './modules/storage/storage.bicep' = {
   }
 }
 
+/*
 module mysql './modules/mysql/mysql.bicep' = {
   name: 'mysql'
   scope: spokeRG
@@ -136,3 +137,4 @@ module mysql './modules/mysql/mysql.bicep' = {
     skuName: mysqlSKU
   }
 }
+*/
