@@ -108,9 +108,10 @@ module acr './modules/acr/acr.bicep' = {
 }
 
 module storage './modules/storage/storage.bicep' = {
-  name: storageAccountName
+  name: 'storageAccount'
   scope: spokeRG
   params: {
+    storageAccountName: storageAccountName
     tagValues: tagValues
     location: location
   }
