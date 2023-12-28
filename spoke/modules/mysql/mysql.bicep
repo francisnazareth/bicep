@@ -12,10 +12,7 @@ param administratorLogin string
 param administratorLoginPassword string
 
 @description('Azure database for MySQL sku name ')
-param skuName string = 'GP_Gen5_2'
-
-@description('Azure database for MySQL Sku Size ')
-param SkuSizeMB int = 5120
+param skuName string 
 
 @description('Azure database for MySQL pricing tier')
 @allowed([

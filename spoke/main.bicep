@@ -27,7 +27,10 @@ param storageAccountName string
 
 param mysqlServerName string
 param mysqlAdminUsername string
+@secure()
+@minLength(8)
 param mysqlAdminPassword string
+param mysqlSKU string 
 
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
@@ -130,5 +133,6 @@ module mysql './modules/mysql/mysql.bicep' = {
     serverName: mysqlServerName
     administratorLogin: mysqlAdminUsername
     administratorLoginPassword: mysqlAdminPassword
+    skuName: mysqlSKU
   }
 }
