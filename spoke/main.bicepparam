@@ -28,3 +28,4 @@ param aksSystemNodeMaxCount = 6
 param aksSystemNodepoolMaxPods = 30
 param logAnalyticsWorkspaceID = '/subscriptions/cb56ce60-e634-4951-8ac8-ec94c671d4e8/resourceGroups/rg-monitoring-moi-hub-qc-01/providers/Microsoft.OperationalInsights/workspaces/law-moi-hub-qc-01'
 param acrName = 'acrmoipocqc01'
+param storageAccountName = 'stmoisuperapppocqc01'

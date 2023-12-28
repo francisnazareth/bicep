@@ -23,6 +23,7 @@ param aksSystemNodeMaxCount int = 6
 param aksSystemNodepoolMaxPods int = 30
 param logAnalyticsWorkspaceID string 
 param acrName string 
+param storageAccountName string 
 
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
@@ -103,5 +104,14 @@ module acr './modules/acr/acr.bicep' = {
     tagValues: tagValues
     location: location
     acrName: acrName
+  }
+}
+
+module storage './modules/storage/storage.bicep' = {
+  name: storageAccountName
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
   }
 }
