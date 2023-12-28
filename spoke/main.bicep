@@ -25,6 +25,10 @@ param logAnalyticsWorkspaceID string
 param acrName string 
 param storageAccountName string 
 
+param mysqlServerName string
+param mysqlAdminUsername string
+param mysqlAdminPassword string
+
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
   location: location
@@ -114,5 +118,17 @@ module storage './modules/storage/storage.bicep' = {
     storageAccountName: storageAccountName
     tagValues: tagValues
     location: location
+  }
+}
+
+module mysql './modules/mysql/mysql.bicep' = {
+  name: 'mysql'
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    serverName: mysqlServerName
+    administratorLogin: mysqlAdminUsername
+    administratorLoginPassword: mysqlAdminPassword
   }
 }
