@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Landing Zone Builder</title>
@@ -13,305 +14,346 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-    <h1>Hub landing zone values</h1>
-    <h2>Key prefixes</h2><br/>
-    <table class="table" width="700px">
-        <tr>
-            <td><label for="customerPrefix">Customer prefix</label></td>
-            <td width="400px"><input type="text" name = "customerPrefix" id="customerPrefix" placeholder="cust" value="cust" onChange="updateValues()" class="form-control" ></td>
-        </tr>
-        <tr>
-            <td><label for="locationPrefix">Location prefix</label></td>
-            <td><input type="text" name = "locationPrefix" id="locationPrefix" placeholder="qc" value="qc" onChange="updateValues()" class="form-control" ></td>
-        </tr>
+        <h1>Hub landing zone values</h1>
+        <h2>Key prefixes</h2><br />
+        <table class="table" width="700px">
+            <tr>
+                <td><label for="customerPrefix">Customer prefix</label></td>
+                <td style="width: 400px"><input type="text" name="customerPrefix" id="customerPrefix" placeholder="cust"
+                        value="cust" onChange="updateValues()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="locationPrefix">Location prefix</label></td>
+                <td><input type="text" name="locationPrefix" id="locationPrefix" placeholder="qc" value="qc"
+                        onChange="updateValues()" class="form-control"></td>
+            </tr>
 
-        <tr>
-            <td><label for="envPrefix">Environment prefix</label></td>
-            <td><input type="text" name = "envPrefix" id="envPrefix" placeholder="hub" value="hub" onChange="updateValues()"  class="form-control"></td>
-        </tr>
+            <tr>
+                <td><label for="envPrefix">Environment prefix</label></td>
+                <td><input type="text" name="envPrefix" id="envPrefix" placeholder="hub" value="hub"
+                        onChange="updateValues()" class="form-control"></td>
+            </tr>
 
-    </table>
-    <h2>Resource Group names</h2><br/>
-    <table class="table" width="700px">
-        <tr>
-            <td><label for="hubBackupRG">Backup resource group name</label></td>
-            <td ><input type="text" name="hub_backup_rg" id="hubBackupRG" placeholder="rg-backup-hub-qc-01" onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td><label for="hubManagementRG">Management resource group name</label></td>
-            <td><input type="text" name="hub_network_rg" id="hubManagementRG" placeholder="rg-management-hub-qc-01"  onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td><label for="hubMonitoringRG">Monitoring resource group name</label></td>
-            <td><input type="text" name="hub_network_rg" id="hubMonitoringRG" placeholder="rg-monitoring-hub-qc-01"  onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td><label for="hubNetworkRG">Network & security resource group name</label></td>
-            <td ><input type="text" name="hub_network_rg" id="hubNetworkRG" placeholder="rg-network-hub-qc-01"  onChange = "updateBicep()" class="form-control" ></td>
-        </tr>
-      </table>
+        </table>
+        <h2>Resource Group names</h2><br />
+        <table class="table" width="700px">
+            <tr>
+                <td><label for="hubBackupRG">Backup resource group name</label></td>
+                <td style="width: 400px"><input type="text" name="hub_backup_rg" id="hubBackupRG" placeholder="rg-backup-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="hubManagementRG">Management resource group name</label></td>
+                <td><input type="text" name="hub_network_rg" id="hubManagementRG" placeholder="rg-management-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="hubMonitoringRG">Monitoring resource group name</label></td>
+                <td><input type="text" name="hub_network_rg" id="hubMonitoringRG" placeholder="rg-monitoring-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="hubNetworkRG">Network & security resource group name</label></td>
+                <td><input type="text" name="hub_network_rg" id="hubNetworkRG" placeholder="rg-network-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+        </table>
 
-      <h2>Hub virtual network address space settings</h2><br/>
-      <table class="table" width="700px">
-      <tr>
-        <td><label for="hubVnetAddressSpace">Hub virtual network address space</label></td>
-        <td><input type="text" name="hub_vnet_address_space" id = "hubVnetAddressSpace" placeholder="10.0.0.0/23" value="10.0.0.0/23" onChange = "updateBicep()"  class="form-control"></td>
-    </tr>
-    <tr>
-        <td><label for="firewallSubnet">Azure Firewall Subnet address space</label><br/>
-        <section>Minimum value of /26 is required for Azure Firewall subnet address space.</section>
-        </td>
-        <td><input type="text" name="hub_firewall_subnet" id = "firewallSubnet" placeholder="10.0.0.0/26" value="10.0.0.0/26" onChange = "updateBicep()" class="form-control"></td>
-    </tr>
-    <tr>
-        <td><label for="bastionSubnet">Azure Bastion service address space</label></td>
-        <td><input type="text" name="hub_bastion_subnet" placeholder="10.0.0.64/26" id="bastionSubnet" value="10.0.0.64/26" onChange = "updateBicep()" class="form-control"></td>
-    </tr>
-    <tr>
-        <td><label for="vpnGatewaySubnet">Azure VPN Gateway address space</label></td>
-        <td><input type="text" name="hub_vpn_subnet" id="vpnGatewaySubnet" placeholder="10.0.0.128/27" value="10.0.0.128/27" onChange = "updateBicep()" class="form-control"></td>
-    </tr>
-    <tr>
-        <td><label for="appGwSubnet">  Azure Application Gateway address space</label></td>
-        <td><input type="text" name="hub_agw_subnet" id="appGwSubnet" placeholder="10.0.0.160/27" value="10.0.0.160/27" onChange = "updateBicep()"  class="form-control"></td>
-    </tr>
-    <tr>
-        <td><label for="mgmtSubnetAddressPrefix">Management subnet address space</label></td>
-        <td><input type="text" name="management_subnet_address_space" id="mgmtSubnetAddressPrefix" placeholder="10.0.0.192/28" value="10.0.0.192/28" onChange = "updateBicep()" class="form-control" ></td>
-    </tr>
-    <tr>
-        <td><label for="sharedServicesSubnetAddressPrefix"> Shared services subnet address space</label></td>
-        <td><input type="text" name="sharedservices_subnet_address_space" id="sharedSvcSubnetAddressPrefix" placeholder="10.0.0.208/28" value="10.0.0.208/28" onChange = "updateBicep()"  class="form-control"></td>
-    </tr>
-</table>
-<h2>Resource Names</h2>
-<table class="table" width="700px">
-        <tr>
-            <td>
-        Hub virtual network name</td>
-        <td><input type="text" name="hubVnet" id="hubVnet" placeholder="vnet-hub-qc-01" onChange = "updateBicep()" class="form-control" ></td>	
-        </tr>
-        
-        <tr>
-            <td>Azure bastion service name</td>
-            <td><input type="text" name="hub_bastion_service_name" id = "bastionServiceName" placeholder="bastion-hub-qc-01"  onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Azure bastion public IP address name</td>
-            <td><input type="text" name="bastion_public_ip" id="bastionPublicIP" placeholder="publicip-bastion-hub-qc-01"  onChange = "updateBicep()" class="form-control"></td>
-        </tr>
+        <h2>Hub virtual network address space settings</h2><br />
+        <table class="table" width="700px">
+            <tr>
+                <td><label for="hubVnetAddressSpace">Hub virtual network address space</label></td>
+                <td style="width: 400px"><input type="text" name="hub_vnet_address_space" id="hubVnetAddressSpace" placeholder="10.0.0.0/23"
+                        value="10.0.0.0/23" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="firewallSubnet">Azure Firewall Subnet address space</label><br />
+                    <div >Minimum value of /26 is required for Azure Firewall subnet address space.</div>
+                </td>
+                <td><input type="text" name="firewallSubnet" id="firewallSubnet" placeholder="10.0.0.0/26"
+                        value="10.0.0.0/26" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="bastionSubnet">Azure Bastion service address space</label><br/>
+                    <div >Minimum value of /26 is required for Bastion subnet address space.</div>
+                </td>
+                <td><input type="text" name="bastionSubnet" placeholder="10.0.0.64/26" id="bastionSubnet"
+                        value="10.0.0.64/26" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="vpnGatewaySubnet">Azure VPN Gateway address space</label></td>
+                <td><input type="text" name="vpnGatewaySubnet" id="vpnGatewaySubnet" placeholder="10.0.0.128/27"
+                        value="10.0.0.128/27" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="appGwSubnet"> Azure Application Gateway address space</label></td>
+                <td><input type="text" name="hub_agw_subnet" id="appGwSubnet" placeholder="10.0.0.160/27"
+                        value="10.0.0.160/27" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="mgmtSubnetAddressPrefix">Management subnet address space</label></td>
+                <td><input type="text" name="mgmtSubnetAddressPrefix" id="mgmtSubnetAddressPrefix"
+                        placeholder="10.0.0.192/28" value="10.0.0.192/28" onChange="updateBicep()" class="form-control">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="sharedServicesSubnetAddressPrefix"> Shared services subnet address space</label></td>
+                <td><input type="text" name="sharedSvcSubnetAddressPrefix" id="sharedSvcSubnetAddressPrefix"
+                        placeholder="10.0.0.208/28" value="10.0.0.208/28" onChange="updateBicep()" class="form-control">
+                </td>
+            </tr>
+        </table>
+        <h2>Resource Names</h2>
+        <table class="table" width="700px">
+            <tr>
+                <td>
+                   <label for="hubVNet">Hub virtual network name </label></td>
+                <td style="width: 400px"><input type="text" name="hubVnet" id="hubVnet" placeholder="vnet-hub-qc-01" onChange="updateBicep()"
+                        class="form-control"></td>
+            </tr>
 
-        <tr>
-            <td>Azure Application Gateway subnet name</td>
-            <td><input type="text" name="snet-appgw" id="appGwSubnetName" placeholder="snet-agw-hub-qc-01"  onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Management subnet name</td>
-            <td><input type="text" name="snet-mgmt" id="mgmtSubnetName" placeholder="snet-management-hub-qc-01"  onChange = "updateBicep()" class="form-control"></td>
-        </tr>
+            <tr>
+                <td><label for="bastionServiceName">Bastion service name</label></td>
+                <td><input type="text" name="hub_bastion_service_name" id="bastionServiceName"
+                        placeholder="bastion-hub-qc-01" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="bastionPublicIP">Bastion public IP address name</label> </td>
+                <td><input type="text" name="bastion_public_ip" id="bastionPublicIP"
+                        placeholder="publicip-bastion-hub-qc-01" onChange="updateBicep()" class="form-control"></td>
+            </tr>
 
-        <tr>
-            <td> Shared Services subnet name</td>
-            <td><input type="text" name="snet-shared-services" id="sharedSvcSubnetName" placeholder="snet-sharedservices-hub-qc-01" onChange = "updateBicep()" class="form-control" ></td>
-        </tr>
+            <tr>
+                <td><label for="appGwSubnetName">Application Gateway subnet name</label></td>
+                <td><input type="text" name="snet-appgw" id="appGwSubnetName" placeholder="snet-agw-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="mgmtSubnetName">Management subnet name</label></td>
+                <td><input type="text" name="snet-mgmt" id="mgmtSubnetName" placeholder="snet-management-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
 
-        <tr>
-            <td>Azure firewall name</td>
-            <td><input type="text" name="firewall-name" id="azureFirewall" placeholder="firewall-hub-qc-01" onChange = "updateBicep()"  class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Azure firewall public IP name</td>
-            <td><input type="text" name="firewall-public-ip" id="azureFirewallPublicIP" placeholder="publicip-firewall-hub-qc-01" onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Azure firewall policy name</td>
-            <td><input type="text" name="firewall-policy" id="azureFirewallPolicy" placeholder="fwpolicy-moi-hub-qc-01" onChange = "updateBicep()" class="form-control" ></td>
-        </tr>
-        <tr>
-            <td>Log analytics workspace name</td>
-            <td><input type="text" name="log-analytics-workspace" id="lawName" placeholder="law-hub-qc-01" onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Log analytics workspace retention days</td>
-            <td><input type="number" name="log-analytics-retention-days" id="lawRetentionDays" placeholder=30 value="30" onChange = "updateBicep()"  class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Bastion SKU</td>
-            <td>
-                <select name=""bastion-sku" id="bastionSKU" onChange = "updateBicep()" class="form-control" >
-                    <option value="Basic">Basic</option>
-                    <option value="Standard" selected="selected">Standard</option>
-                </select>    
-            </td>
-        </tr>
+            <tr>
+                <td><label for="sharedServicesSubnetName">Shared Services subnet name</label></td>
+                <td><input type="text" name="snet-shared-services" id="sharedSvcSubnetName"
+                        placeholder="snet-sharedservices-hub-qc-01" onChange="updateBicep()" class="form-control"></td>
+            </tr>
 
-</table>
-<h2>DDOS Plan settings</h2>
-<table class="table" width="700px">
+            <tr>
+                <td><label for="azureFirewall">Firewall name</label></td>
+                <td><input type="text" name="firewall-name" id="azureFirewall" placeholder="firewall-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="azureFirewallPublicIP">Firewall public IP name</label></td>
+                <td><input type="text" name="firewall-public-ip" id="azureFirewallPublicIP"
+                        placeholder="publicip-firewall-hub-qc-01" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="azureFirewallPolicy"> Azure firewall policy name</label></td>
+                <td><input type="text" name="firewall-policy" id="azureFirewallPolicy"
+                        placeholder="fwpolicy-moi-hub-qc-01" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="lawName">Log analytics workspace name</label></td>
+                <td><input type="text" name="log-analytics-workspace" id="lawName" placeholder="law-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="lawRetentionDays">Log analytics workspace retention days</label></td>
+                <td><input type="number" name="log-analytics-retention-days" id="lawRetentionDays" placeholder=30
+                        value="30" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="bastionSKU">Bastion SKU</label></td>
+                <td>
+                    <select name="bastion-sku" id="bastionSKU" onChange="updateBicep()" class="form-control">
+                        <option value="Basic">Basic</option>
+                        <option value="Standard" selected="selected">Standard</option>
+                    </select>
+                </td>
+            </tr>
 
-        <tr>
-            <td>DDOS protection plan name</td>
-            <td><input type="text" name="ddos-plan" id="ddosPlan" placeholder="ddosplan-hub-qc-01" onChange = "updateBicep()" class="form-control" ></td>
-        </tr>
+        </table>
+        <h2>DDOS Plan settings</h2>
+        <table class="table" width="700px">
 
-        <tr>
-            <td>Enable DDOS Plan</td>
-            <td>
-                <label><input type="radio" name="ddosPlanEnabled" id="ddosPlanEnabled" value="true" checked onChange = "updateBicep()" class="form-control" style="width: 150px"/>
-                Enabled<br/></label>
-                <label><input type="radio" name="ddosPlanEnabled" id="ddosPlanEnabled" value="false" onChange = "updateBicep()" class="form-control"  style="width: 150px"/>
-                Disabled</label>
-            </td>
-        </tr>
-</table>
-<h2>Jump server settings</h2>
-<table class="table" width="700px">
+            <tr>
+                <td><label for="ddosPlan">DDOS protection plan name</td>
+                <td style="width: 400px"> <input type="text" name="ddos-plan" id="ddosPlan" placeholder="ddosplan-hub-qc-01"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
 
-        <tr>
-            <td>Jump server name prefix</td>
-            <td><input type="text" name="jump-server-prefix" id="jumpServerPrefix" placeholder="winvm" value="winvm" onChange = "updateBicep()" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Jump server VM Size</td>
-            <td><input type="text" name="jump-server-size" id="jumpServerSize" placeholder="Standard_D2s_v3" value="Standard_D2s_v3" onChange = "updateBicep()" class="form-control" ></td>
-        </tr>	
-        <tr>
-            <td>Jump server admin user</td>
-            <td><input type="text" name="admin-user" id="adminUser" onChange = "updateBicep()" class="form-control"  ></td>
-        </tr>	
-        <tr>
-            <td>Jump server admin password</td>
-            <td><input type="text" name="admin-password" id="adminPassword" onChange = "updateBicep()" class="form-control" ></td>
-        </tr>
-    </table>
+            <tr>
+                <td><label for="ddosPlanEnabled">Enable DDOS Plan</label></td>
+                <td>
+                    <label><input type="radio" name="ddosPlanEnabled" id="ddosPlanEnabled" value="true" checked
+                            onChange="updateBicep()" class="form-control" style="width: 150px" />
+                        Enabled<br /></label>
+                    <label><input type="radio" name="ddosPlanEnabled" id="ddosPlanEnabled" value="false"
+                            onChange="updateBicep()" class="form-control" style="width: 150px" />
+                        Disabled</label>
+                </td>
+            </tr>
+        </table>
+        <h2>Jump server settings</h2>
+        <table class="table" width="700px">
 
-    <div height="50px"></div>
-    <h1>Bicep parameter file</h1>
-    <table width="700px">
-        <tr>
-            <td width="100%"">
-                <textarea rows=60 cols=80 id="bicep"></textarea>
-            </td>
-        </tr>
-    </table>
+            <tr>
+                <td><label for="jumpServerPrefix">Jump server name prefix</label></td>
+                <td style="width: 400px"><input type="text" name="jumpServerPrefix" id="jumpServerPrefix" placeholder="winvm" value="winvm"
+                        onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="jumpServerSize">Jump server VM Size</label></td>
+                <td><input type="text" name="jump-server-size" id="jumpServerSize" placeholder="Standard_D2s_v3"
+                        value="Standard_D2s_v3" onChange="updateBicep()" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label for="adminUser">Jump server admin user</label></td>
+                <td><input type="text" name="adminUser" id="adminUser" onChange="updateBicep()" class="form-control">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="adminPassword">Jump server admin password</label></td>
+                <td><input type="text" name="admin-password" id="adminPassword" onChange="updateBicep()"
+                        class="form-control"></td>
+            </tr>
+        </table>
 
-    <script>
+        <div height="50px"></div>
+        <h1>Bicep parameter file</h1>
+        <table width="700px">
+            <tr>
+                <td width="100%"">
+                <div class="bd-clipboard"><button class="btn-clipboard" title="" data-original-title="Copy to clipboard">Copy</button></div>
+                <textarea rows=60 cols=80 id=" bicep"></textarea>
+                </td>
+            </tr>
+        </table>
 
-        function updateValues() {
-            document.getElementById("hubBackupRG").value= createString('rg-backup');
-            document.getElementById("hubManagementRG").value= createString('rg-management');
-            document.getElementById("hubMonitoringRG").value= createString('rg-monitoring');
-            document.getElementById("hubNetworkRG").value= createString('rg-network');
-            document.getElementById("bastionServiceName").value = createString('bastion');
-            document.getElementById("hubVnet").value = createString('vnet');
-            document.getElementById("bastionPublicIP").value = createString('publicip-bastion');
-            document.getElementById("appGwSubnetName").value = createString('snet-agw');
-            document.getElementById("mgmtSubnetName").value = createString('snet-management');
-            document.getElementById("sharedSvcSubnetName").value = createString('snet-sharedservices');
-            document.getElementById("azureFirewall").value = createString('firewall');
-            document.getElementById("azureFirewallPublicIP").value = createString('publicip-firewall');
-            document.getElementById("azureFirewallPolicy").value = createString('fwpolicy');
-            document.getElementById("lawName").value = createString('law');
-            document.getElementById("ddosPlan").value = createString('ddosplan');
-            updateBicep();
-        }
+        <script>
 
-        function createString(resourceType ) {
-            var customerPrefixVal = document.getElementById("customerPrefix").value;
-            var locationPrefixVal = document.getElementById("locationPrefix").value;
-
-            var envPrefixVal = document.getElementById("envPrefix").value;
-
-            if ( customerPrefixVal == null || customerPrefixVal == "") {
-                customerPrefixVal = "-";
-            } else {
-                customerPrefixVal = "-" + customerPrefixVal + "-";
+            function updateValues() {
+                document.getElementById("hubBackupRG").value = createString('rg-backup');
+                document.getElementById("hubManagementRG").value = createString('rg-management');
+                document.getElementById("hubMonitoringRG").value = createString('rg-monitoring');
+                document.getElementById("hubNetworkRG").value = createString('rg-network');
+                document.getElementById("bastionServiceName").value = createString('bastion');
+                document.getElementById("hubVnet").value = createString('vnet');
+                document.getElementById("bastionPublicIP").value = createString('publicip-bastion');
+                document.getElementById("appGwSubnetName").value = createString('snet-agw');
+                document.getElementById("mgmtSubnetName").value = createString('snet-management');
+                document.getElementById("sharedSvcSubnetName").value = createString('snet-sharedservices');
+                document.getElementById("azureFirewall").value = createString('firewall');
+                document.getElementById("azureFirewallPublicIP").value = createString('publicip-firewall');
+                document.getElementById("azureFirewallPolicy").value = createString('fwpolicy');
+                document.getElementById("lawName").value = createString('law');
+                document.getElementById("ddosPlan").value = createString('ddosplan');
+                updateBicep();
             }
 
-            if (locationPrefixVal == null || locationPrefixVal == "" ) {
-                locationPrefixVal = "-";
-            } else { 
-                locationPrefixVal = "-" + locationPrefixVal + "-";
+            function createString(resourceType) {
+                var customerPrefixVal = document.getElementById("customerPrefix").value;
+                var locationPrefixVal = document.getElementById("locationPrefix").value;
+
+                var envPrefixVal = document.getElementById("envPrefix").value;
+
+                if (customerPrefixVal == null || customerPrefixVal == "") {
+                    customerPrefixVal = "-";
+                } else {
+                    customerPrefixVal = "-" + customerPrefixVal + "-";
+                }
+
+                if (locationPrefixVal == null || locationPrefixVal == "") {
+                    locationPrefixVal = "-";
+                } else {
+                    locationPrefixVal = "-" + locationPrefixVal + "-";
+                }
+
+                return resourceType + customerPrefixVal + envPrefixVal + locationPrefixVal + "01";
             }
 
-            return resourceType + customerPrefixVal + envPrefixVal + locationPrefixVal + "01";
-        }
+            function updateBicep() {
+                var vnetName = document.getElementById("hubVnet").value;
+                var vnetAddressSpace = document.getElementById("hubVnetAddressSpace").value;
+                var hubBackupRG = document.getElementById("hubBackupRG").value;
+                var hubManagementRG = document.getElementById("hubManagementRG").value;
+                var hubMonitoringRG = document.getElementById("hubMonitoringRG").value;
+                var hubNetworkRG = document.getElementById("hubNetworkRG").value;
+                var firewallSubnet = document.getElementById("firewallSubnet").value;
+                var bastionServiceName = document.getElementById("bastionServiceName").value;
+                var bastionSubnet = document.getElementById("bastionSubnet").value;
+                var bastionPublicIP = document.getElementById("bastionPublicIP").value;
+                var vpnGatewaySubnet = document.getElementById("vpnGatewaySubnet").value;
+                var appGwSubnetName = document.getElementById("appGwSubnetName").value;
+                var appGwSubnet = document.getElementById("appGwSubnet").value;
+                var mgmtSubnetName = document.getElementById("mgmtSubnetName").value;
+                var mgmtSubnetAddressPrefix = document.getElementById("mgmtSubnetAddressPrefix").value;
+                var sharedSvcSubnetName = document.getElementById("sharedSvcSubnetName").value;
+                var sharedSvcSubnetAddressPrefix = document.getElementById("sharedSvcSubnetAddressPrefix").value;
+                var bastionServiceName = document.getElementById("bastionServiceName").value;
+                var bastionPublicIP = document.getElementById("bastionPublicIP").value;
+                var bastionSKU = document.getElementById("bastionSKU").value;
+                var lawRetentionDays = document.getElementById("lawRetentionDays").value;
+                var lawName = document.getElementById("lawName").value;
+                var ddosPlan = document.getElementById("ddosPlan").value;
+                var azureFirewall = document.getElementById("azureFirewall").value;
+                var azureFirewallPublicIP = document.getElementById("azureFirewallPublicIP").value;
+                var azureFirewallPolicy = document.getElementById("azureFirewallPolicy").value;
+                var jumpServerPrefix = document.getElementById("jumpServerPrefix").value;
+                var jumpServerSize = document.getElementById("jumpServerSize").value;
+                var adminUser = document.getElementById("adminUser").value;
+                var ddosPlanEnabled = document.querySelector('input[name="ddosPlanEnabled"]:checked').value;
 
-        function updateBicep() {
-            var vnetName = document.getElementById("hubVnet").value;
-            var vnetAddressSpace = document.getElementById("hubVnetAddressSpace").value;
-            var hubBackupRG = document.getElementById("hubBackupRG").value;
-            var hubManagementRG = document.getElementById("hubManagementRG").value;
-            var hubMonitoringRG = document.getElementById("hubMonitoringRG").value;
-            var hubNetworkRG = document.getElementById("hubNetworkRG").value;
-            var firewallSubnet = document.getElementById("firewallSubnet").value;
-            var bastionServiceName = document.getElementById("bastionServiceName").value;
-            var bastionSubnet = document.getElementById("bastionSubnet").value;
-            var bastionPublicIP = document.getElementById("bastionPublicIP").value;
-            var vpnGatewaySubnet = document.getElementById("vpnGatewaySubnet").value;
-            var appGwSubnetName = document.getElementById("appGwSubnetName").value;
-            var appGwSubnet = document.getElementById("appGwSubnet").value;
-            var mgmtSubnetName = document.getElementById("mgmtSubnetName").value; 
-            var mgmtSubnetAddressPrefix = document.getElementById("mgmtSubnetAddressPrefix").value; 
-            var sharedSvcSubnetName = document.getElementById("sharedSvcSubnetName").value; 
-            var sharedSvcSubnetAddressPrefix = document.getElementById("sharedSvcSubnetAddressPrefix").value; 
-            var bastionServiceName = document.getElementById("bastionServiceName").value; 
-            var bastionPublicIP = document.getElementById("bastionPublicIP").value; 
-            var bastionSKU = document.getElementById("bastionSKU").value; 
-            var lawRetentionDays = document.getElementById("lawRetentionDays").value; 
-            var lawName = document.getElementById("lawName").value; 
-            var ddosPlan = document.getElementById("ddosPlan").value; 
-            var azureFirewall = document.getElementById("azureFirewall").value; 
-            var azureFirewallPublicIP = document.getElementById("azureFirewallPublicIP").value;
-            var azureFirewallPolicy = document.getElementById("azureFirewallPolicy").value;
-            var jumpServerPrefix = document.getElementById("jumpServerPrefix").value;
-            var jumpServerSize = document.getElementById("jumpServerSize").value;
-            var adminUser = document.getElementById("adminUser").value;
-            var ddosPlanEnabled = document.querySelector('input[name="ddosPlanEnabled"]:checked').value;
+                console.log(ddosPlanEnabled);
 
-            console.log(ddosPlanEnabled);
-            
-            var bicepTextArea = document.getElementById('bicep');
-            bicepTextArea.innerHTML = 
-            "using './main.bicep'" + "\r\n" + 
-            "param vnetName = " + "'" + vnetName + "'" + "\r\n" +
-            "param vnetAddressPrefix = " + "'" + vnetAddressSpace + "'" + "\r\n" +
-            "param backupRGName = " + "'" + hubBackupRG + "'" + "\r\n" +
-            "param managementRGName = " + "'" + hubManagementRG + "'" + "\r\n" +
-            "param monitoringRGName = " + "'" + hubMonitoringRG + "'" + "\r\n" +
-            "param networkRGName = " + "'" + hubNetworkRG + "'" + "\r\n" + 
-            "param fwSubnetAddressPrefix = " + "'" + firewallSubnet + "'" + "\r\n" + 
-            "param bastionSubnetAddressPrefix = " + "'" + bastionSubnet + "'" + "\r\n" + 
-            "param vpnSubnetAddressPrefix = " + "'" + vpnGatewaySubnet + "'" + "\r\n" +
-            "param appGwSubnetName = " + "'" + appGwSubnetName + "'" + "\r\n" + 
-            "param appGwSubnetAddressPrefix = " + "'" + appGwSubnet + "'" + "\r\n" +
-            "param managementSubnetName = " + "'" + mgmtSubnetName + "'" + "\r\n" +
-            "param managementSubnetAddressPrefix = " + "'" + mgmtSubnetAddressPrefix + "'" + "\r\n" +
-            "param sharedServicesSubnetName = " + "'" + sharedSvcSubnetName + "'" + "\r\n" +
-            "param sharedServicesSubnetAddressPrefix = " + "'" + sharedSvcSubnetAddressPrefix + "'" + "\r\n" +
-            "param bastionName  = " + "'" + bastionServiceName + "'" + "\r\n" +
-            "param bastionPublicIPName  = " + "'" + bastionPublicIP + "'" + "\r\n" +
-            "param bastionSku  = " + "'" + bastionSKU + "'" + "\r\n" +
-            "param logAnalyticsRetentionInDays  = " +   lawRetentionDays + "\r\n" +
-            "param logAnalyticsWorkspaceName  = " + "'" + lawName + "'" + "\r\n" +
-            "param logAnalyticsSku = 'PerGB2018'" + "\r\n" +
-            "param ddosProtectionPlanName = " + "'" + ddosPlan + "'" + "\r\n" +
-            "param ddosProtectionPlanEnabled = " + ddosPlanEnabled  + "\r\n" +
-            "param firewallPublicIPName = " + "'" + azureFirewallPublicIP + "'" + "\r\n" +
-            "param firewallPolicyName = " + "'" + azureFirewallPolicy + "'" + "\r\n" +
-            "param firewallName = " + "'" + azureFirewall + "'" + "\r\n" +
-            "param availabilityZones = [1,2,3]" + "\r\n" +
-            "param vmName = " + "'" + jumpServerPrefix + "'" + "\r\n" +
-            "param vmSize = " + "'" + jumpServerSize + "'" + "\r\n" +
-            "param adminUsername = " + "'" + jumpServerSize + "'" + "\r\n" +
-            "param adminPassword = 'P@ssw0rd123!'" +
-            ""
-            ;
-        }
-    </script>
+                var bicepTextArea = document.getElementById('bicep');
+                bicepTextArea.innerHTML =
+                    "using './main.bicep'" + "\r\n" +
+                    "param vnetName = " + "'" + vnetName + "'" + "\r\n" +
+                    "param vnetAddressPrefix = " + "'" + vnetAddressSpace + "'" + "\r\n" +
+                    "param backupRGName = " + "'" + hubBackupRG + "'" + "\r\n" +
+                    "param managementRGName = " + "'" + hubManagementRG + "'" + "\r\n" +
+                    "param monitoringRGName = " + "'" + hubMonitoringRG + "'" + "\r\n" +
+                    "param networkRGName = " + "'" + hubNetworkRG + "'" + "\r\n" +
+                    "param fwSubnetAddressPrefix = " + "'" + firewallSubnet + "'" + "\r\n" +
+                    "param bastionSubnetAddressPrefix = " + "'" + bastionSubnet + "'" + "\r\n" +
+                    "param vpnSubnetAddressPrefix = " + "'" + vpnGatewaySubnet + "'" + "\r\n" +
+                    "param appGwSubnetName = " + "'" + appGwSubnetName + "'" + "\r\n" +
+                    "param appGwSubnetAddressPrefix = " + "'" + appGwSubnet + "'" + "\r\n" +
+                    "param managementSubnetName = " + "'" + mgmtSubnetName + "'" + "\r\n" +
+                    "param managementSubnetAddressPrefix = " + "'" + mgmtSubnetAddressPrefix + "'" + "\r\n" +
+                    "param sharedServicesSubnetName = " + "'" + sharedSvcSubnetName + "'" + "\r\n" +
+                    "param sharedServicesSubnetAddressPrefix = " + "'" + sharedSvcSubnetAddressPrefix + "'" + "\r\n" +
+                    "param bastionName  = " + "'" + bastionServiceName + "'" + "\r\n" +
+                    "param bastionPublicIPName  = " + "'" + bastionPublicIP + "'" + "\r\n" +
+                    "param bastionSku  = " + "'" + bastionSKU + "'" + "\r\n" +
+                    "param logAnalyticsRetentionInDays  = " + lawRetentionDays + "\r\n" +
+                    "param logAnalyticsWorkspaceName  = " + "'" + lawName + "'" + "\r\n" +
+                    "param logAnalyticsSku = 'PerGB2018'" + "\r\n" +
+                    "param ddosProtectionPlanName = " + "'" + ddosPlan + "'" + "\r\n" +
+                    "param ddosProtectionPlanEnabled = " + ddosPlanEnabled + "\r\n" +
+                    "param firewallPublicIPName = " + "'" + azureFirewallPublicIP + "'" + "\r\n" +
+                    "param firewallPolicyName = " + "'" + azureFirewallPolicy + "'" + "\r\n" +
+                    "param firewallName = " + "'" + azureFirewall + "'" + "\r\n" +
+                    "param availabilityZones = [1,2,3]" + "\r\n" +
+                    "param vmName = " + "'" + jumpServerPrefix + "'" + "\r\n" +
+                    "param vmSize = " + "'" + jumpServerSize + "'" + "\r\n" +
+                    "param adminUsername = " + "'" + jumpServerSize + "'" + "\r\n" +
+                    "param adminPassword = 'P@ssw0rd123!'" +
+                    ""
+                    ;
+            }
+        </script>
 
-</div>
+    </div>
 </body>
+
 </html>

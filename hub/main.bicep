@@ -35,6 +35,10 @@ param backupRGName string
 param managementRGName string 
 param monitoringRGName string
 param networkRGName string
+param recoveryServiceVaultName string 
+param managedIdentityName string
+param keyVaultName string 
+param keyVaultSKU string 
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
@@ -141,5 +145,37 @@ module vm './modules/vm/vm.bicep' = {
     vmSize: vmSize
     adminUsername: adminUsername
     adminPassword: adminPassword
+  }
+}
+
+module recoveryServiceVault './modules/recoveryServiceVault/recoveryServiceVault.bicep' = {
+  name: 'recoveryServiceVault'
+  scope: backupRG
+  params: {
+    location: location
+    tagValues: tagValues
+    vaultName: recoveryServiceVaultName
+  }
+}
+
+module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
+  name: 'managedIdentity'
+  scope: managementRG
+  params: {
+    location: location
+    tagValues: tagValues
+    managedIdentityName: managedIdentityName
+  }
+}
+
+module keyVault './modules/keyVault/keyVault.bicep' = {
+  name: 'keyVault'
+  scope: networkRG
+  params: {
+    location: location
+    tagValues: tagValues
+    keyVaultName: keyVaultName
+    keyVaultSKU: keyVaultSKU
+    objectID: managedIdentity.outputs.managedIdentityPrincipalID
   }
 }
