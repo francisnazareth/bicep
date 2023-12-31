@@ -26,7 +26,6 @@ resource applicationGateway 'Microsoft.Network/applicationGateways@2023-06-01' =
     sku: {
       name: 'WAF_v2'
       tier: 'WAF_v2'
-      capacity: 2
     }
     gatewayIPConfigurations: [
       {
