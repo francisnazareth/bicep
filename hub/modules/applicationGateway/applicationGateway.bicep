@@ -93,6 +93,7 @@ resource applicationGateway 'Microsoft.Network/applicationGateways@2023-06-01' =
         name: 'appGatewayRule'
         properties: {
           ruleType: 'Basic'
+          priority: 100
           httpListener: {
             id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGatewayName, 'appGatewayHttpListener')
           }
