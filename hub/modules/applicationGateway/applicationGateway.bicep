@@ -122,6 +122,8 @@ resource applicationGateway 'Microsoft.Network/applicationGateways@2023-06-01' =
 resource appGWWAFPolicy 'Microsoft.Network/ApplicationGatewayWebApplicationFirewallPolicies@2021-08-01' = {
   name: appGatewayWAFPolicyName
   location: location
+  tags: tagValues
+  
   properties: {
     customRules: []
     policySettings: {

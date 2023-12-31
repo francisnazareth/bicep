@@ -42,6 +42,9 @@ param keyVaultSKU string
 param applicationGatewayName string 
 param applicationGatewayPublicIPName string 
 param appGatewayWAFPolicyName string
+param vpnGatewayName string 
+param vpnGatewayPublicIP string 
+param vpnGatewayTier string
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
@@ -196,4 +199,18 @@ module applicationGateway './modules/applicationGateway/applicationGateway.bicep
       appGwSubnetId: vnet.outputs.appGwSubnetID
       availabilityZones: availabilityZones
     }
+}
+
+module virtualNetworkGateway './modules/virtualNetworkGateway/virtualNetworkGateway.bicep' = {
+  name: 'vnetGateway'
+  scope: networkRG
+  params: {
+    location: location
+    tagValues: tagValues
+    availabilityZones: availabilityZones
+    vpnGatewayName: vpnGatewayName
+    vpnGatewayTier: vpnGatewayTier
+    vpnGatewayPublicIPName: vpnGatewayPublicIP
+    vpnGatewaySubnetId: vnet.outputs.vpnSubnetID
+  }
 }
