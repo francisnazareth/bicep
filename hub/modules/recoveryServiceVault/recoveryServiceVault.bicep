@@ -10,5 +10,7 @@ resource recoveryServiceVault 'Microsoft.RecoveryServices/vaults@2023-06-01' = {
       name: 'RS0'
       tier: 'Standard'
   }
-  properties:{}
+  properties:{
+    publicNetworkAccess: 'Enabled'
+  }
 }
