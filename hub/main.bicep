@@ -39,6 +39,8 @@ param recoveryServiceVaultName string
 param managedIdentityName string
 param keyVaultName string 
 param keyVaultSKU string 
+param applicationGatewayName string 
+param applicationGatewayPublicIPName string 
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
@@ -178,4 +180,18 @@ module keyVault './modules/keyVault/keyVault.bicep' = {
     keyVaultSKU: keyVaultSKU
     objectID: managedIdentity.outputs.managedIdentityPrincipalID
   }
+}
+
+module applicationGateway './modules/applicationGateway/applicationGateway.bicep' = {
+    name: applicationGatewayName
+    
+    scope: networkRG
+    params: {
+      location: location 
+      tagValues: tagValues
+      applicationGatewayName: applicationGatewayName
+      appGwPublicIPName: applicationGatewayPublicIPName
+      appGwSubnetId: vnet.outputs.appGwSubnetID
+      availabilityZones: availabilityZones
+    }
 }
