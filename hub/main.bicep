@@ -41,6 +41,7 @@ param keyVaultName string
 param keyVaultSKU string 
 param applicationGatewayName string 
 param applicationGatewayPublicIPName string 
+param appGatewayWAFPolicyName string
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
@@ -190,6 +191,7 @@ module applicationGateway './modules/applicationGateway/applicationGateway.bicep
       location: location 
       tagValues: tagValues
       applicationGatewayName: applicationGatewayName
+      appGatewayWAFPolicyName: appGatewayWAFPolicyName
       appGwPublicIPName: applicationGatewayPublicIPName
       appGwSubnetId: vnet.outputs.appGwSubnetID
       availabilityZones: availabilityZones

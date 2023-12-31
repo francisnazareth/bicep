@@ -4,6 +4,7 @@ param appGwSubnetId string
 param availabilityZones array
 param appGwPublicIPName string 
 param applicationGatewayName string 
+param appGatewayWAFPolicyName string 
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: appGwPublicIPName
@@ -22,10 +23,14 @@ resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
 resource applicationGateway 'Microsoft.Network/applicationGateways@2023-06-01' = {
   name: applicationGatewayName 
   location: location
+  tags: tagValues
   properties: {
     sku: {
       name: 'WAF_v2'
       tier: 'WAF_v2'
+    }
+    firewallPolicy: {
+      id: appGWWAFPolicy.id
     }
     gatewayIPConfigurations: [
       {
@@ -110,6 +115,33 @@ resource applicationGateway 'Microsoft.Network/applicationGateways@2023-06-01' =
     autoscaleConfiguration: {
       minCapacity: 0
       maxCapacity: 10
+    }
+  }
+}
+
+resource appGWWAFPolicy 'Microsoft.Network/ApplicationGatewayWebApplicationFirewallPolicies@2021-08-01' = {
+  name: appGatewayWAFPolicyName
+  location: location
+  properties: {
+    customRules: []
+    policySettings: {
+      requestBodyCheck: true
+      maxRequestBodySizeInKb: 128
+      fileUploadLimitInMb: 100
+      state: 'Enabled'
+      mode: 'Prevention'
+    }
+    managedRules:{
+      managedRuleSets: [
+        {
+          ruleSetType: 'OWASP'
+          ruleSetVersion: '3.2'
+        }
+        {
+          ruleSetType: 'Microsoft_BotManagerRuleSet'
+          ruleSetVersion: '0.1'
+        }
+      ]
     }
   }
 }
