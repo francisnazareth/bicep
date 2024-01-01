@@ -49,7 +49,7 @@ param vpnGatewayName string
 param vpnGatewayPublicIP string 
 param vpnGatewayTier string
 param vmRouteTableName string 
-param aksAddressRange array = ['10.0.4.0/23', '10.0.6.0/28']
+param aksAddressRange array 
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
