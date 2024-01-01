@@ -24,7 +24,7 @@ param aksSystemNodepoolMaxPods int = 30
 param logAnalyticsWorkspaceID string 
 param acrName string 
 param storageAccountName string 
-param availabilityZones array = [1,2,3]
+param availabilityZones array 
 param mysqlSubnetAddressPrefix string
 param mysqlSubnetName string
 param vmSubnetAddressPrefix string 

@@ -127,11 +127,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
         maxCount: aksSystemNodeMaxCount
         maxPods: aksSystemNodepoolMaxPods
         enableAutoScaling: true
-        availabilityZones: [
-          '1'
-          '2'
-          '3'
-        ]
+        availabilityZones: availabilityZones
         vmSize: agentVMSize
         osType: 'Linux'
         mode: 'System'
