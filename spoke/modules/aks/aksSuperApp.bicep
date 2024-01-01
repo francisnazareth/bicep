@@ -12,10 +12,10 @@ param osDiskSizeGB int = 0
 @description('The number of nodes for the cluster.')
 @minValue(1)
 @maxValue(50)
-param aksSystemNodeCount int
-param aksSystemNodeMinCount int
-param aksSystemNodeMaxCount int 
-param aksSystemNodepoolMaxPods int 
+param aksSystemNodeCount int = 3
+param aksSystemNodeMinCount int = 3
+param aksSystemNodeMaxCount int = 6 
+param aksSystemNodepoolMaxPods int = 30
 
 @description('The size of the Virtual Machine.')
 param agentVMSize string 
@@ -31,6 +31,8 @@ resource privateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   location: 'global'
   tags: tagValues
 }
+
+output privateDNSZoneID string = privateDNSZone.id
 
 resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: resourceGroup()
@@ -65,8 +67,10 @@ resource privateDNSZoneContributorRoleAssignment 'Microsoft.Authorization/roleAs
 param aksSKUName string = 'Basic'
 param aksSKUTier string = 'Paid'
 param aksUpgradeChannel string = 'stable'
+param serviceCIDR string = '10.8.0.0/24'
+param dnsServiceIP string = '10.8.0.10'
 
-resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
+resource superAppAKS 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   name: aksClusterName
   location: location
   tags: tagValues
@@ -112,8 +116,8 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
       networkPlugin: 'azure'
       networkPluginMode: 'Overlay'
       networkPolicy: 'calico'
-      serviceCidr: '10.8.0.0/24'
-      dnsServiceIP: '10.8.0.10'
+      serviceCidr: serviceCIDR
+      dnsServiceIP: dnsServiceIP
       outboundType: 'userDefinedRouting'
     }
 
@@ -143,12 +147,13 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   }
 }
 
-output controlPlaneFQDN string = aks.properties.fqdn
-output aksObject object = aks
+output controlPlaneFQDN string = superAppAKS.properties.fqdn
+output aksObject object = superAppAKS
 
+/*
 resource voipNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npvoipsvc'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 8
@@ -169,7 +174,7 @@ resource voipNodePool 'Microsoft.ContainerService/managedClusters/agentPools@202
 
 resource appServiceNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npappsvc'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 8
@@ -190,7 +195,7 @@ resource appServiceNodePool 'Microsoft.ContainerService/managedClusters/agentPoo
 
 resource imServiceNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npimsvc'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 10
@@ -211,7 +216,7 @@ resource imServiceNodePool 'Microsoft.ContainerService/managedClusters/agentPool
 
 resource miniappOpenPlatformNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npminiappop'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 2
@@ -232,7 +237,7 @@ resource miniappOpenPlatformNodePool 'Microsoft.ContainerService/managedClusters
 
 resource kafkaNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npkafka'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 3
@@ -253,7 +258,7 @@ resource kafkaNodePool 'Microsoft.ContainerService/managedClusters/agentPools@20
 
 resource zookeeperNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npzookeeper'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 3
@@ -274,7 +279,7 @@ resource zookeeperNodePool 'Microsoft.ContainerService/managedClusters/agentPool
 
 resource rabbitmqNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'nprabbitmq'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 3
@@ -295,7 +300,7 @@ resource rabbitmqNodePool 'Microsoft.ContainerService/managedClusters/agentPools
 
 resource elasticsearchNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npelastic'
-  parent: aks
+  parent: superAppAKS
   properties: {
     availabilityZones: availabilityZones 
     count: 3
@@ -313,3 +318,4 @@ resource elasticsearchNodePool 'Microsoft.ContainerService/managedClusters/agent
     }
   }
 }
+*/

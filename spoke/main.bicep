@@ -6,21 +6,22 @@ param tagValues object
 
 param vnetName string
 param vnetAddressPrefix string
-param aksSubnetName string
-param aksSubnetAddressPrefix string
 param peSubnetName string
 param peSubnetAddressPrefix string
 param aksRouteTableName string
 param firewallPrivateIP string
 param aksManagedIdentityName string
-param aksAPISubnetName string
-param aksAPISubnetAddressPrefix string
+param aksSuperAppSubnetName string
+param aksSuperAppSubnetAddressPrefix string
+param aksSuperAppAPISubnetName string
+param aksSuperAppAPISubnetAddressPrefix string
+param aksMiniAppSubnetName string
+param aksMiniAppSubnetAddressPrefix string
+param aksMiniAppAPISubnetName string
+param aksMiniAppAPISubnetAddressPrefix string
 param agentVMSize string
-param aksClusterName string 
-param aksSystemNodeCount int = 3
-param aksSystemNodeMinCount int = 3
-param aksSystemNodeMaxCount int = 6
-param aksSystemNodepoolMaxPods int = 30
+param aksSuperAppClusterName string 
+param aksMiniAppClusterName string 
 param logAnalyticsWorkspaceID string 
 param acrName string 
 param storageAccountName string 
@@ -73,12 +74,16 @@ module vnet './modules/vnet/vnet.bicep' = {
     location: location
     vnetName: vnetName
     vnetAddressPrefix: vnetAddressPrefix
-    aksSubnetName: aksSubnetName
-    aksSubnetAddressPrefix: aksSubnetAddressPrefix
+    aksSuperAppSubnetName: aksSuperAppSubnetName
+    aksSuperAppSubnetAddressPrefix: aksSuperAppSubnetAddressPrefix
+    aksSuperAppAPISubnetName: aksSuperAppAPISubnetName
+    aksSuperAppAPISubnetAddressPrefix: aksSuperAppAPISubnetAddressPrefix
+    aksMiniAppSubnetName: aksMiniAppSubnetName
+    aksMiniAppSubnetAddressPrefix: aksMiniAppSubnetAddressPrefix
+    aksMiniAppAPISubnetName: aksMiniAppAPISubnetName
+    aksMiniAppAPISubnetAddressPrefix: aksMiniAppAPISubnetAddressPrefix
     peSubnetName: peSubnetName
     peSubnetAddressPrefix: peSubnetAddressPrefix
-    aksAPISubnetName: aksAPISubnetName
-    aksAPISubnetAddressPrefix: aksAPISubnetAddressPrefix
     aksRouteTableID: aksRouteTable.outputs.routeTableId
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
@@ -89,8 +94,8 @@ module vnet './modules/vnet/vnet.bicep' = {
   }
 }
 
-module aks './modules/aks/aks.bicep' = {
-  name: 'aks'
+module superAppAKS './modules/aks/aksSuperApp.bicep' = {
+  name: aksSuperAppClusterName
   scope: spokeRG
   dependsOn: [
     vnet
@@ -101,19 +106,35 @@ module aks './modules/aks/aks.bicep' = {
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
     location: location
-    aksAPISubnetID: vnet.outputs.aksAPISubnetID
-    aksSubnetID: vnet.outputs.aksSubnetID
-    aksClusterName: aksClusterName
+    aksAPISubnetID: vnet.outputs.aksSuperAppAPISubnetID
+    aksSubnetID: vnet.outputs.aksSuperAppSubnetID
+    aksClusterName: aksSuperAppClusterName
     agentVMSize: agentVMSize
-    aksSystemNodeCount: aksSystemNodeCount
-    aksSystemNodeMinCount: aksSystemNodeMinCount
-    aksSystemNodeMaxCount: aksSystemNodeMaxCount
-    aksSystemNodepoolMaxPods: aksSystemNodepoolMaxPods
     logAnalyticsWorkspaceID: logAnalyticsWorkspaceID
     availabilityZones: availabilityZones
   }
 }
 
+module miniAppAKS './modules/aks/aksMiniApp.bicep' = {
+  name: aksMiniAppClusterName
+  scope: spokeRG
+  dependsOn: [
+    vnet
+    managedIdentity
+  ]
+  params: {
+    tagValues: tagValues
+    aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
+    location: location
+    aksAPISubnetID: vnet.outputs.aksMiniAppAPISubnetID
+    aksSubnetID: vnet.outputs.aksMiniAppSubnetID
+    aksClusterName: aksMiniAppClusterName
+    agentVMSize: agentVMSize
+    logAnalyticsWorkspaceID: logAnalyticsWorkspaceID
+    availabilityZones: availabilityZones
+    privateDNSZoneID: superAppAKS.outputs.privateDNSZoneID
+  }
+}
 module acr './modules/acr/acr.bicep' = {
   name: 'acr'
   scope: spokeRG
