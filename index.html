@@ -225,6 +225,11 @@
                 <td><input type="text" name="admin-password" id="adminPassword" onChange="updateBicep()"
                         class="form-control"></td>
             </tr>
+            <tr>
+                <td><label for="vmNSGName">Network Security Group name for VM (Jump server) Subnet</label></td>
+                <td><input type="text" name="vmNSGName" id="vmNSGName" onChange="updateBicep()"
+                        class="form-control"></td>
+            </tr>
         </table>
 
         <div height="50px"></div>
@@ -232,8 +237,7 @@
         <table width="700px">
             <tr>
                 <td width="100%"">
-                <div class="bd-clipboard"><button class="btn-clipboard" title="" data-original-title="Copy to clipboard">Copy</button></div>
-                <textarea rows=60 cols=80 id=" bicep"></textarea>
+                <textarea rows=60 cols=80 id="bicepTextArea"></textarea>
                 </td>
             </tr>
         </table>
@@ -241,21 +245,22 @@
         <script>
 
             function updateValues() {
-                document.getElementById("hubBackupRG").value = createString('rg-backup');
-                document.getElementById("hubManagementRG").value = createString('rg-management');
-                document.getElementById("hubMonitoringRG").value = createString('rg-monitoring');
-                document.getElementById("hubNetworkRG").value = createString('rg-network');
-                document.getElementById("bastionServiceName").value = createString('bastion');
-                document.getElementById("hubVnet").value = createString('vnet');
-                document.getElementById("bastionPublicIP").value = createString('publicip-bastion');
-                document.getElementById("appGwSubnetName").value = createString('snet-agw');
-                document.getElementById("mgmtSubnetName").value = createString('snet-management');
-                document.getElementById("sharedSvcSubnetName").value = createString('snet-sharedservices');
-                document.getElementById("azureFirewall").value = createString('firewall');
-                document.getElementById("azureFirewallPublicIP").value = createString('publicip-firewall');
-                document.getElementById("azureFirewallPolicy").value = createString('fwpolicy');
-                document.getElementById("lawName").value = createString('law');
-                document.getElementById("ddosPlan").value = createString('ddosplan');
+                document.getElementById("hubBackupRG").value            = createString('rg-backup');
+                document.getElementById("hubManagementRG").value        = createString('rg-management');
+                document.getElementById("hubMonitoringRG").value        = createString('rg-monitoring');
+                document.getElementById("hubNetworkRG").value           = createString('rg-network');
+                document.getElementById("bastionServiceName").value     = createString('bastion');
+                document.getElementById("hubVnet").value                = createString('vnet');
+                document.getElementById("bastionPublicIP").value        = createString('publicip-bastion');
+                document.getElementById("appGwSubnetName").value        = createString('snet-agw');
+                document.getElementById("mgmtSubnetName").value         = createString('snet-management');
+                document.getElementById("sharedSvcSubnetName").value    = createString('snet-sharedservices');
+                document.getElementById("azureFirewall").value          = createString('firewall');
+                document.getElementById("azureFirewallPublicIP").value  = createString('publicip-firewall');
+                document.getElementById("azureFirewallPolicy").value    = createString('fwpolicy');
+                document.getElementById("lawName").value                = createString('law');
+                document.getElementById("ddosPlan").value               = createString('ddosplan');
+                document.getElementById("vmNSGName").value              = createString('nsg-jumpserver');
                 updateBicep();
             }
 
@@ -292,67 +297,85 @@
                 var bastionSubnet = document.getElementById("bastionSubnet").value;
                 var bastionPublicIP = document.getElementById("bastionPublicIP").value;
                 var vpnGatewaySubnet = document.getElementById("vpnGatewaySubnet").value;
+                
                 var appGwSubnetName = document.getElementById("appGwSubnetName").value;
+                
                 var appGwSubnet = document.getElementById("appGwSubnet").value;
+                
                 var mgmtSubnetName = document.getElementById("mgmtSubnetName").value;
+                
                 var mgmtSubnetAddressPrefix = document.getElementById("mgmtSubnetAddressPrefix").value;
+                
                 var sharedSvcSubnetName = document.getElementById("sharedSvcSubnetName").value;
+                
                 var sharedSvcSubnetAddressPrefix = document.getElementById("sharedSvcSubnetAddressPrefix").value;
+                
                 var bastionServiceName = document.getElementById("bastionServiceName").value;
+                
                 var bastionPublicIP = document.getElementById("bastionPublicIP").value;
+                
                 var bastionSKU = document.getElementById("bastionSKU").value;
+                
                 var lawRetentionDays = document.getElementById("lawRetentionDays").value;
+                
                 var lawName = document.getElementById("lawName").value;
+                
                 var ddosPlan = document.getElementById("ddosPlan").value;
+                
                 var azureFirewall = document.getElementById("azureFirewall").value;
+                
                 var azureFirewallPublicIP = document.getElementById("azureFirewallPublicIP").value;
+                
                 var azureFirewallPolicy = document.getElementById("azureFirewallPolicy").value;
+                
                 var jumpServerPrefix = document.getElementById("jumpServerPrefix").value;
+                
                 var jumpServerSize = document.getElementById("jumpServerSize").value;
-                var adminUser = document.getElementById("adminUser").value;
+                
+                //var adminUser= document.getElementById("adminUser").value;
+                
+                var vmNSGName = document.getElementById("vmNSGName").value; 
+                console.log(vmNSGName);
                 var ddosPlanEnabled = document.querySelector('input[name="ddosPlanEnabled"]:checked').value;
-
                 console.log(ddosPlanEnabled);
 
-                var bicepTextArea = document.getElementById('bicep');
-                bicepTextArea.innerHTML =
-                    "using './main.bicep'" + "\r\n" +
-                    "param vnetName = " + "'" + vnetName + "'" + "\r\n" +
-                    "param vnetAddressPrefix = " + "'" + vnetAddressSpace + "'" + "\r\n" +
-                    "param backupRGName = " + "'" + hubBackupRG + "'" + "\r\n" +
-                    "param managementRGName = " + "'" + hubManagementRG + "'" + "\r\n" +
-                    "param monitoringRGName = " + "'" + hubMonitoringRG + "'" + "\r\n" +
-                    "param networkRGName = " + "'" + hubNetworkRG + "'" + "\r\n" +
-                    "param fwSubnetAddressPrefix = " + "'" + firewallSubnet + "'" + "\r\n" +
-                    "param bastionSubnetAddressPrefix = " + "'" + bastionSubnet + "'" + "\r\n" +
-                    "param vpnSubnetAddressPrefix = " + "'" + vpnGatewaySubnet + "'" + "\r\n" +
-                    "param appGwSubnetName = " + "'" + appGwSubnetName + "'" + "\r\n" +
-                    "param appGwSubnetAddressPrefix = " + "'" + appGwSubnet + "'" + "\r\n" +
-                    "param managementSubnetName = " + "'" + mgmtSubnetName + "'" + "\r\n" +
-                    "param managementSubnetAddressPrefix = " + "'" + mgmtSubnetAddressPrefix + "'" + "\r\n" +
-                    "param sharedServicesSubnetName = " + "'" + sharedSvcSubnetName + "'" + "\r\n" +
-                    "param sharedServicesSubnetAddressPrefix = " + "'" + sharedSvcSubnetAddressPrefix + "'" + "\r\n" +
-                    "param bastionName  = " + "'" + bastionServiceName + "'" + "\r\n" +
-                    "param bastionPublicIPName  = " + "'" + bastionPublicIP + "'" + "\r\n" +
-                    "param bastionSku  = " + "'" + bastionSKU + "'" + "\r\n" +
-                    "param logAnalyticsRetentionInDays  = " + lawRetentionDays + "\r\n" +
-                    "param logAnalyticsWorkspaceName  = " + "'" + lawName + "'" + "\r\n" +
-                    "param logAnalyticsSku = 'PerGB2018'" + "\r\n" +
-                    "param ddosProtectionPlanName = " + "'" + ddosPlan + "'" + "\r\n" +
-                    "param ddosProtectionPlanEnabled = " + ddosPlanEnabled + "\r\n" +
-                    "param firewallPublicIPName = " + "'" + azureFirewallPublicIP + "'" + "\r\n" +
-                    "param firewallPolicyName = " + "'" + azureFirewallPolicy + "'" + "\r\n" +
-                    "param firewallName = " + "'" + azureFirewall + "'" + "\r\n" +
-                    "param availabilityZones = [1,2,3]" + "\r\n" +
-                    "param vmName = " + "'" + jumpServerPrefix + "'" + "\r\n" +
-                    "param vmSize = " + "'" + jumpServerSize + "'" + "\r\n" +
-                    "param adminUsername = " + "'" + jumpServerSize + "'" + "\r\n" +
-                    "param adminPassword = 'P@ssw0rd123!'" +
-                    ""
-                    ;
+                var bicepTextArea = document.getElementById('bicepTextArea');
+                bicepTextArea.innerHTML = 
+                "using './main.bicep'" + "\r\n" +
+                "param vnetName = " + "'" + vnetName + "'" + "\r\n" +
+                "param vnetAddressPrefix = " + "'" + vnetAddressSpace + "'" + "\r\n" +
+                "param backupRGName = " + "'" + hubBackupRG + "'" + "\r\n" +
+                "param managementRGName = " + "'" + hubManagementRG + "'" + "\r\n" +
+                "param monitoringRGName = " + "'" + hubMonitoringRG + "'" + "\r\n" +
+                "param networkRGName = " + "'" + hubNetworkRG + "'" + "\r\n" +
+                "param fwSubnetAddressPrefix = " + "'" + firewallSubnet + "'" + "\r\n" +
+                "param bastionSubnetAddressPrefix = " + "'" + bastionSubnet + "'" + "\r\n" +
+                "param vpnSubnetAddressPrefix = " + "'" + vpnGatewaySubnet + "'" + "\r\n" +
+                "param appGwSubnetName = " + "'" + appGwSubnetName + "'" + "\r\n" +
+                "param appGwSubnetAddressPrefix = " + "'" + appGwSubnet + "'" + "\r\n" +
+                "param managementSubnetName = " + "'" + mgmtSubnetName + "'" + "\r\n" +
+                "param managementSubnetAddressPrefix = " + "'" + mgmtSubnetAddressPrefix + "'" + "\r\n" +
+                "param sharedServicesSubnetName = " + "'" + sharedSvcSubnetName + "'" + "\r\n" +                    
+                "param adminPassword = 'P@ssw0rd123!'" + "\r\n" +
+                "param vmNSGName = " + "'" + vmNSGName + "'" + "\r\n" +
+                "param sharedServicesSubnetAddressPrefix = " + "'" + sharedSvcSubnetAddressPrefix + "'" + "\r\n" +
+                "param bastionName  = " + "'" + bastionServiceName + "'" + "\r\n" +
+                "param bastionPublicIPName  = " + "'" + bastionPublicIP + "'" + "\r\n" +
+                "param bastionSku  = " + "'" + bastionSKU + "'" + "\r\n" +
+                "param logAnalyticsRetentionInDays  = " + lawRetentionDays + "\r\n" +
+                "param logAnalyticsWorkspaceName  = " + "'" + lawName + "'" + "\r\n" +
+                "param logAnalyticsSku = 'PerGB2018'" + "\r\n" +
+                "param ddosProtectionPlanName = " + "'" + ddosPlan + "'" + "\r\n" +
+                "param ddosProtectionPlanEnabled = " + ddosPlanEnabled + "\r\n" +
+                "param firewallPublicIPName = " + "'" + azureFirewallPublicIP + "'" + "\r\n" +
+                "param firewallPolicyName = " + "'" + azureFirewallPolicy + "'" + "\r\n" +
+                "param firewallName = " + "'" + azureFirewall + "'" + "\r\n" +
+                "param availabilityZones = [1,2,3]" + "\r\n" +
+                "param vmName = " + "'" + jumpServerPrefix + "'" + "\r\n" +
+                "param vmSize = " + "'" + jumpServerSize + "'" + "\r\n" +
+                "";
             }
         </script>
-
     </div>
 </body>
 

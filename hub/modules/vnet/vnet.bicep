@@ -14,6 +14,8 @@ param ddosProtectionPlanId string
 param ddosProtectionPlanEnabled bool = true
 param tagValues object
 param vmNSGName string 
+param peSubnetName string
+param peSubnetAddressPrefix string
 
 
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
@@ -66,6 +68,12 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: 'GatewaySubnet'
         properties: {
           addressPrefix: vpnSubnetAddressPrefix
+        }
+      }
+      {
+        name: peSubnetName
+        properties: {
+          addressPrefix: peSubnetAddressPrefix
         }
       }
       {

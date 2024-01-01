@@ -22,7 +22,6 @@ resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   }
 }
 
-
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2022-01-01'= {
   name: firewallPolicyName
   location: location
@@ -148,7 +147,7 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
     ruleCollections: [
       {
         ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
-        name: 'aks-cluster-application-rules'
+        name: 'aks-application-rule-collection'
         priority: 1000
         action: {
           type: 'Allow'
@@ -210,3 +209,6 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-03-01' = {
     }
   }
 }
+
+output firewallPrivateIP string = firewall.properties.hubIPAddresses.privateIPAddress
+

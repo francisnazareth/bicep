@@ -6,6 +6,8 @@ param vnetAddressPrefix string
 param fwSubnetAddressPrefix string
 param bastionSubnetAddressPrefix string
 param vpnSubnetAddressPrefix string
+param peSubnetName string
+param peSubnetAddressPrefix string 
 param appGwSubnetName string
 param appGwSubnetAddressPrefix string
 param managementSubnetName string
@@ -46,6 +48,7 @@ param appGatewayWAFPolicyName string
 param vpnGatewayName string 
 param vpnGatewayPublicIP string 
 param vpnGatewayTier string
+param vmRouteTableName string 
 
 resource backupRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: backupRGName
@@ -91,6 +94,8 @@ module vnet './modules/vnet/vnet.bicep' = {
     fwSubnetAddressPrefix: fwSubnetAddressPrefix
     bastionSubnetAddressPrefix: bastionSubnetAddressPrefix
     vpnSubnetAddressPrefix: vpnSubnetAddressPrefix
+    peSubnetName: peSubnetName
+    peSubnetAddressPrefix: peSubnetAddressPrefix
     appGwSubnetName: appGwSubnetName
     appGwSubnetAddressPrefix: appGwSubnetAddressPrefix
     managementSubnetName: managementSubnetName
@@ -143,6 +148,19 @@ module firewall './modules/firewall/firewall.bicep' = {
   }
 }
 
+module routeTable './modules/routeTable/routeTable.bicep' = {
+  name: 'routeTable'
+  scope: networkRG
+  dependsOn: [firewall]
+  params: {
+    location: location
+    tagValues: tagValues
+    firewallIP: firewall.outputs.firewallPrivateIP
+    routeTableName: vmRouteTableName
+    vmSubnetAddressPrefix: managementSubnetAddressPrefix
+  }
+}
+
 module vm './modules/vm/vm.bicep' = {
   name: 'vm'
   scope: managementRG
@@ -169,7 +187,7 @@ module recoveryServiceVault './modules/recoveryServiceVault/recoveryServiceVault
 
 module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
   name: 'managedIdentity'
-  scope: managementRG
+  scope: networkRG
   params: {
     location: location
     tagValues: tagValues

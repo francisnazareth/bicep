@@ -3,14 +3,18 @@ param vnetAddressPrefix string
 param location string = resourceGroup().location
 param aksSubnetName string
 param aksSubnetAddressPrefix string
+param aksAPISubnetName string
+param aksAPISubnetAddressPrefix string
+param mysqlSubnetName string 
+param mysqlSubnetAddressPrefix string
+param vmSubnetName string
+param vmSubnetAddressPrefix string 
 param peSubnetName string
 param peSubnetAddressPrefix string
 param tagValues object
 param aksRouteTableID string
 param aksManagedIdentityID string
 param aksManagedIdentityPrincipalID string
-param aksAPISubnetName string
-param aksAPISubnetAddressPrefix string
 
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
@@ -45,7 +49,19 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         properties: {
           addressPrefix: peSubnetAddressPrefix
         }
-      }      
+      }
+      {
+        name: mysqlSubnetName
+        properties: {
+          addressPrefix: mysqlSubnetAddressPrefix
+        }
+      }
+      {
+        name: vmSubnetName
+        properties: {
+          addressPrefix: vmSubnetAddressPrefix
+        }
+      }
     ]
   }
 
@@ -60,12 +76,22 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   resource aksApiSubnet 'subnets' existing = {
     name: aksAPISubnetName
   }
+
+  resource mySQLSubnet 'subnets' existing = {
+    name: mysqlSubnetName
+  }
+
+  resource vmSubnet 'subnets' existing = {
+    name: vmSubnetName
+  }
 }
 
 output vnetId string = vnet.id
 output aksSubnetID string = vnet::aksSubnet.id
 output peSubnetID string = vnet::peSubnet.id
 output aksAPISubnetID string = vnet::aksApiSubnet.id
+output mySQLSubnetID string = vnet::mySQLSubnet.id
+output vmSubnetID string = vnet::vmSubnet.id
 
 resource networkContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: resourceGroup()
