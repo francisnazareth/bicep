@@ -37,7 +37,6 @@ resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018
   name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 }
 
-
 resource privateDNSZoneContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: resourceGroup()
   name: 'b12aa53e-6015-4669-85d0-8515ebb3ae7f'
