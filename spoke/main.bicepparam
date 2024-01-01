@@ -37,4 +37,4 @@ param mysqlSubnetAddressPrefix = '10.0.6.64/27'
 param mysqlSubnetName = 'snet-mysql-prod-qc-01'
 param vmSubnetAddressPrefix = '10.0.6.96/27'
 param vmSubnetName = 'snet-vm-prod-qc-01'
-param availabilityZones = [2,3]
+param availabilityZones = ['2','3']
