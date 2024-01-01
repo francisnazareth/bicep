@@ -6,7 +6,8 @@ param firewallName string
 @description('Zone numbers e.g. 1,2,3.')
 param availabilityZones array = []
 param tagValues object
-param aksSubnetRange array = ['10.0.4.0/23','10.0.6.0/28']
+param aksSubnetRange array 
+param jumpVMAddressRange array 
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' =  {
   name: firewallPublicIPName
@@ -174,6 +175,37 @@ resource applicationRuleCollectionGroup 'Microsoft.Network/firewallPolicies/rule
           }
         ]
       }
+
+      {
+        ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
+        name: 'global-rule-windows-update'
+        priority: 1100
+        action: {
+          type: 'Allow'
+        }
+        rules: [
+          {
+            ruleType: 'ApplicationRule'
+            name: 'winupdate-rule-01'
+            protocols: [
+              {
+                protocolType: 'Https'
+                port: 443
+              }
+              {
+                protocolType: 'Http'
+                port: 80
+              }
+            ]
+            fqdnTags: [
+              'WindowsUpdate'
+            ]
+            terminateTLS: false
+            sourceAddresses: jumpVMAddressRange
+          }
+        ]
+      }
+
     ]
   }
 }
