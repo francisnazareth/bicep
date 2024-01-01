@@ -62,13 +62,18 @@ resource privateDNSZoneContributorRoleAssignment 'Microsoft.Authorization/roleAs
   }
 }
 
+param aksSKUName string = 'Basic'
+param aksSKUTier string = 'Paid'
+param aksUpgradeChannel string = 'stable'
+
 resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   name: aksClusterName
   location: location
   tags: tagValues
+
   sku: {
-    name: 'Basic'
-    tier: 'Paid'
+    name: aksSKUName
+    tier: aksSKUTier
   }
 
   identity: {
@@ -81,7 +86,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
     dnsPrefix: aksClusterName
 
     autoUpgradeProfile: {
-      upgradeChannel: 'stable'
+      upgradeChannel: aksUpgradeChannel
     }
 
     addonProfiles: {
@@ -105,6 +110,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
     networkProfile:{
       loadBalancerSku: 'Standard'
       networkPlugin: 'azure'
+      networkPluginMode: 'Overlay'
       networkPolicy: 'calico'
       serviceCidr: '10.8.0.0/24'
       dnsServiceIP: '10.8.0.10'
