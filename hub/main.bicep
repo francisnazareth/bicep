@@ -12,6 +12,7 @@ param managementSubnetName string
 param managementSubnetAddressPrefix string
 param sharedServicesSubnetName string
 param sharedServicesSubnetAddressPrefix string
+param vmNSGName string 
 param bastionName string 
 param bastionPublicIPName string 
 param bastionSku string
@@ -75,6 +76,7 @@ module ddosProtectionPlan 'modules/ddos/ddos.bicep' = {
   params: {
     location: location
     ddosProtectionPlanName: ddosProtectionPlanName
+    ddosPlanEnabled: ddosProtectionPlanEnabled
     tagValues: tagValues
   }
 }
@@ -98,6 +100,7 @@ module vnet './modules/vnet/vnet.bicep' = {
     ddosProtectionPlanId: ddosProtectionPlan.outputs.ddosProtectionPlanId
     ddosProtectionPlanEnabled: ddosProtectionPlanEnabled
     tagValues: tagValues
+    vmNSGName: vmNSGName
   }
 }
 

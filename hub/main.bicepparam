@@ -25,6 +25,7 @@ param firewallName = 'firewall-moi-hub-qc-01'
 param availabilityZones = [1,2,3]
 param vmName = 'moiwinvm'
 param vmSize = 'Standard_D2s_v3'
+param vmNSGName = 'nsg-jumpserver-moi-hub-qc-01'
 param adminUsername = 'adminuser'
 param adminPassword = 'P@ssw0rd123!'
 param tagValues = {
@@ -32,7 +33,7 @@ param tagValues = {
     CostCenter: 'IT'
     Project: 'super app'
     CreatedBy: 'bicep'
-    CreationDate: '2023-26-12'
+    CreationDate: '2024-01-01'
 }
 
 param backupRGName = 'rg-backup-moi-hub-qc-01'
