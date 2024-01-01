@@ -150,7 +150,7 @@ resource superAppAKS 'Microsoft.ContainerService/managedClusters@2022-05-02-prev
 output controlPlaneFQDN string = superAppAKS.properties.fqdn
 output aksObject object = superAppAKS
 
-/*
+
 resource voipNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
   name: 'npvoipsvc'
   parent: superAppAKS
@@ -312,10 +312,11 @@ resource elasticsearchNodePool 'Microsoft.ContainerService/managedClusters/agent
     vmSize: 'Standard_D4s_v4'
     osSKU: 'Ubuntu'
     osType: 'Linux'
+    osDiskSizeGB: 256
     maxPods: 10
     nodeLabels: {
       workload: 'elasticsearch'
     }
   }
 }
-*/
+

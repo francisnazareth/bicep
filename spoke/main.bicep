@@ -94,6 +94,7 @@ module vnet './modules/vnet/vnet.bicep' = {
   }
 }
 
+/*
 module superAppAKS './modules/aks/aksSuperApp.bicep' = {
   name: aksSuperAppClusterName
   scope: spokeRG
@@ -135,6 +136,8 @@ module miniAppAKS './modules/aks/aksMiniApp.bicep' = {
     privateDNSZoneID: superAppAKS.outputs.privateDNSZoneID
   }
 }
+*/
+
 module acr './modules/acr/acr.bicep' = {
   name: 'acr'
   scope: spokeRG
@@ -155,7 +158,6 @@ module storage './modules/storage/storage.bicep' = {
   }
 }
 
-/*
 module mysql './modules/mysql/mysql.bicep' = {
   name: 'mysql'
   scope: spokeRG
@@ -168,4 +170,3 @@ module mysql './modules/mysql/mysql.bicep' = {
     skuName: mysqlSKU
   }
 }
-*/
