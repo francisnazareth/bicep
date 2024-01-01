@@ -16,6 +16,7 @@ param tagValues object
 param vmNSGName string 
 param peSubnetName string
 param peSubnetAddressPrefix string
+param routeTableID string 
 
 
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
@@ -88,6 +89,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
           addressPrefix: managementSubnetAddressPrefix
           networkSecurityGroup: {
             id: networkSecurityGroup.id
+          }
+          routeTable: {
+            id: routeTableID
           }
         }
       }

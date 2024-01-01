@@ -24,6 +24,11 @@ param aksSystemNodepoolMaxPods int = 30
 param logAnalyticsWorkspaceID string 
 param acrName string 
 param storageAccountName string 
+param availabilityZones array = [1,2,3]
+param mysqlSubnetAddressPrefix string
+param mysqlSubnetName string
+param vmSubnetAddressPrefix string 
+param vmSubnetName string 
 
 param mysqlServerName string
 param mysqlAdminUsername string
@@ -77,6 +82,10 @@ module vnet './modules/vnet/vnet.bicep' = {
     aksRouteTableID: aksRouteTable.outputs.routeTableId
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
+    mysqlSubnetAddressPrefix: mysqlSubnetAddressPrefix
+    mysqlSubnetName: mysqlSubnetName 
+    vmSubnetAddressPrefix: vmSubnetAddressPrefix
+    vmSubnetName: vmSubnetName
   }
 }
 
@@ -101,6 +110,7 @@ module aks './modules/aks/aks.bicep' = {
     aksSystemNodeMaxCount: aksSystemNodeMaxCount
     aksSystemNodepoolMaxPods: aksSystemNodepoolMaxPods
     logAnalyticsWorkspaceID: logAnalyticsWorkspaceID
+    availabilityZones: availabilityZones
   }
 }
 

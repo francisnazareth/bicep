@@ -29,3 +29,4 @@ resource routeTable 'Microsoft.Network/routeTables@2023-06-01' = {
     ]
   }
 }
+
