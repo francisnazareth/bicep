@@ -160,5 +160,156 @@ resource voipNodePool 'Microsoft.ContainerService/managedClusters/agentPools@202
     vmSize: 'Standard_D4s_v4'
     osSKU: 'Ubuntu'
     osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'voipservice'
+    }
+  }
+}
+
+resource appServiceNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'npappsvc'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 8
+    maxCount: 20
+    minCount: 8
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D8s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'appservice'
+    }
+  }
+}
+
+resource imServiceNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'npimsvc'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 10
+    maxCount: 20
+    minCount: 10
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D4s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'imservice'
+    }
+  }
+}
+
+resource miniappOpenPlatformNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'npminiappop'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 2
+    maxCount: 5
+    minCount: 2
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D4s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'miniappopenplatform'
+    }
+  }
+}
+
+resource kafkaNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'npkafka'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 3
+    maxCount: 6
+    minCount: 3
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D4s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'kafka'
+    }
+  }
+}
+
+resource zookeeperNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'npzookeeper'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 3
+    maxCount: 6
+    minCount: 3
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D4s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'zookeeper'
+    }
+  }
+}
+
+resource rabbitmqNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'nprabbitmq'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 3
+    maxCount: 6
+    minCount: 3
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D4s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'rabbitmq'
+    }
+  }
+}
+
+resource elasticsearchNodePool 'Microsoft.ContainerService/managedClusters/agentPools@2023-10-02-preview' = {
+  name: 'npelastic'
+  parent: aks
+  properties: {
+    availabilityZones: availabilityZones 
+    count: 3
+    maxCount: 6
+    minCount: 3
+    enableAutoScaling: true
+    mode: 'User'
+    tags: tagValues
+    vmSize: 'Standard_D4s_v4'
+    osSKU: 'Ubuntu'
+    osType: 'Linux'
+    maxPods: 10
+    nodeLabels: {
+      workload: 'elasticsearch'
+    }
   }
 }
