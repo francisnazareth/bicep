@@ -31,7 +31,8 @@ param mysqlSubnetName string
 param vmSubnetAddressPrefix string 
 param vmSubnetName string 
 
-param mysqlServerName string
+param mysqlSuperAppServerName string
+param mysqlMiniAppServerName string 
 param mysqlAdminUsername string
 @secure()
 @minLength(8)
@@ -159,12 +160,12 @@ module storage './modules/storage/storage.bicep' = {
 }
 
 module mysql './modules/mysql/mysql.bicep' = {
-  name: 'mysql'
+  name: 'mysql-superapp'
   scope: spokeRG
   params: {
     tagValues: tagValues
     location: location
-    serverName: mysqlServerName
+    serverName: mysqlSuperAppServerName
     administratorLogin: mysqlAdminUsername
     administratorLoginPassword: mysqlAdminPassword
     skuName: mysqlSKU
