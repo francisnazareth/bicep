@@ -199,6 +199,6 @@ module mysqlMiniApp './modules/mysql/mysql.bicep' = {
     administratorLogin: mysqlAdminUsername
     administratorLoginPassword: mysqlAdminPassword
     skuName: mysqlSKU
-    mysqlSubnetID: vnet.outputs.mysqlSuperAppSubnetID
+    mysqlSubnetID: vnet.outputs.mysqlMiniAppSubnetID
   }
 }

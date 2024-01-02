@@ -44,20 +44,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         }
       }
       {
-        name: aksSuperAppAPISubnetName
-        properties: {
-          addressPrefix: aksSuperAppAPISubnetAddressPrefix
-          delegations: [
-            {
-              name: 'snet-aks-superapp-api-01-delegation'
-              properties: {
-                serviceName: 'Microsoft.ContainerService/managedClusters'
-              }
-            }
-          ]
-        }
-      }
-      {
         name: aksMiniAppSubnetName
         properties: {
           addressPrefix: aksMiniAppSubnetAddressPrefix
@@ -67,51 +53,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         }
       }
       {
-        name: aksMiniAppAPISubnetName
-        properties: {
-          addressPrefix: aksMiniAppAPISubnetAddressPrefix
-          delegations: [
-            {
-              name: 'snet-aks-miniapp-api-01-delegation'
-              properties: {
-                serviceName: 'Microsoft.ContainerService/managedClusters'
-              }
-            }
-          ]
-        }
-      }
-      {
         name: peSubnetName
         properties: {
           addressPrefix: peSubnetAddressPrefix
-        }
-      }
-      {
-        name: mysqlSuperAppSubnetName
-        properties: {
-          addressPrefix: mysqlSuperAppSubnetAddressPrefix
-          delegations: [
-            {
-              name: 'snet-mysql-superapp-01-delegation'
-              properties: {
-                serviceName: 'Microsoft.DBforMySQL/flexibleservers'
-              }
-            }
-          ]
-        }
-      }
-      {
-        name: mysqlMiniAppSubnetName
-        properties: {
-          addressPrefix: mysqlMiniAppSubnetAddressPrefix
-          delegations: [
-            {
-              name: 'snet-mysql-miniapp-01-delegation'
-              properties: {
-                serviceName: 'Microsoft.DBforMySQL/flexibleservers'
-              }
-            }
-          ]
         }
       }
       {
@@ -127,30 +71,12 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       name: aksSuperAppSubnetName
   }
 
-  resource aksSuperAppApiSubnet 'subnets' existing = {
-    name: aksSuperAppAPISubnetName
-  } 
-
   resource aksMiniAppSubnet 'subnets' existing = {
     name: aksMiniAppSubnetName
   }
 
-
-  resource aksMiniAppApiSubnet 'subnets' existing = {
-    name: aksMiniAppAPISubnetName
-  }
-  
-
   resource peSubnet 'subnets' existing = {
     name: peSubnetName
-  }
-
-  resource mysqlSuperAppSubnet 'subnets' existing = {
-    name: mysqlSuperAppSubnetName
-  }
-
-  resource mysqlMiniAppSubnet 'subnets' existing = {
-    name: mysqlMiniAppSubnetName
   }
 
   resource vmSubnet 'subnets' existing = {
@@ -158,14 +84,78 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   }
 }
 
+resource aksSuperAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: aksSuperAppAPISubnetName
+  properties: {
+    addressPrefix: aksSuperAppAPISubnetAddressPrefix
+    delegations: [
+      {
+        name: 'ManagedClusters'
+        properties: {
+          serviceName: 'Microsoft.ContainerService/managedClusters'
+        }
+      }
+    ]
+  }
+}
+
+resource aksMiniAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: aksMiniAppAPISubnetName
+  properties: {
+    addressPrefix: aksMiniAppAPISubnetAddressPrefix
+    delegations: [
+      {
+        name: 'ManagedClusters'
+        properties: {
+          serviceName: 'Microsoft.ContainerService/managedClusters'
+        }
+      }
+    ]
+  }
+}
+
+resource mysqlSuperAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: mysqlSuperAppSubnetName
+  properties: {
+    addressPrefix: mysqlSuperAppSubnetAddressPrefix
+    delegations: [
+      {
+        name: 'MySQLflexibleServers'
+        properties: {
+          serviceName: 'Microsoft.DBforMySQL/flexibleServers'
+        }
+      }
+    ]
+  }
+}
+
+resource mysqlMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: mysqlMiniAppSubnetName
+  properties: {
+    addressPrefix: mysqlMiniAppSubnetAddressPrefix
+    delegations: [
+      {
+        name: 'MySQLflexibleServers'
+        properties: {
+          serviceName: 'Microsoft.DBforMySQL/flexibleServers'
+        }
+      }
+    ]
+  }
+}
+
 output vnetId string = vnet.id
 output aksSuperAppSubnetID string = vnet::aksSuperAppSubnet.id
 output peSubnetID string = vnet::peSubnet.id
-output aksSuperAppAPISubnetID string = vnet::aksSuperAppApiSubnet.id
+output aksSuperAppAPISubnetID string = aksSuperAppAPISubnet.id
 output aksMiniAppSubnetID string = vnet::aksMiniAppSubnet.id
-output aksMiniAppAPISubnetID string = vnet::aksMiniAppApiSubnet.id
-output mysqlSuperAppSubnetID string = vnet::mysqlSuperAppSubnet.id
-output mysqlMiniAppSubnetID string = vnet::mysqlMiniAppSubnet.id
+output aksMiniAppAPISubnetID string = aksMiniAppAPISubnet.id
+output mysqlSuperAppSubnetID string = mysqlSuperAppSubnet.id
+output mysqlMiniAppSubnetID string = mysqlMiniAppSubnet.id
 output vmSubnetID string = vnet::vmSubnet.id
 output vnet object = vnet
 
