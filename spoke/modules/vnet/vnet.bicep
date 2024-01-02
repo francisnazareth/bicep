@@ -50,6 +50,7 @@ resource aksSuperAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01
 
 resource aksMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [aksSuperAppSubnet]
   name: aksMiniAppSubnetName
   properties: {
     addressPrefix: aksMiniAppSubnetAddressPrefix
@@ -61,24 +62,25 @@ resource aksMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01'
 
 resource peSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [aksMiniAppSubnet]
   name: peSubnetName
   properties: {
     addressPrefix: peSubnetAddressPrefix
   }
 }
 
-/*
 resource vmSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [peSubnet]
   name: vmSubnetName
   properties: {
     addressPrefix: vmSubnetAddressPrefix
   }
 }
-*/
 
 resource aksSuperAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [vmSubnet]
   name: aksSuperAppAPISubnetName
   properties: {
     addressPrefix: aksSuperAppAPISubnetAddressPrefix
@@ -95,6 +97,7 @@ resource aksSuperAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07
 
 resource aksMiniAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [aksSuperAppAPISubnet]
   name: aksMiniAppAPISubnetName
   properties: {
     addressPrefix: aksMiniAppAPISubnetAddressPrefix
@@ -111,6 +114,7 @@ resource aksMiniAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-
 
 resource mysqlSuperAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [aksMiniAppAPISubnet]
   name: mysqlSuperAppSubnetName
   properties: {
     addressPrefix: mysqlSuperAppSubnetAddressPrefix
@@ -127,6 +131,7 @@ resource mysqlSuperAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-
 
 resource mysqlMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
+  dependsOn: [mysqlSuperAppSubnet]
   name: mysqlMiniAppSubnetName
   properties: {
     addressPrefix: mysqlMiniAppSubnetAddressPrefix
@@ -149,7 +154,7 @@ output aksMiniAppSubnetID string = aksMiniAppSubnet.id
 output aksMiniAppAPISubnetID string = aksMiniAppAPISubnet.id
 output mysqlSuperAppSubnetID string = mysqlSuperAppSubnet.id
 output mysqlMiniAppSubnetID string = mysqlMiniAppSubnet.id
-//output vmSubnetID string = vmSubnet.id
+output vmSubnetID string = vmSubnet.id
 
 resource networkContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: resourceGroup()
