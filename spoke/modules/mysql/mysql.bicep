@@ -14,6 +14,8 @@ param administratorLoginPassword string
 @description('Azure database for MySQL sku name ')
 param skuName string 
 
+param mysqlSubnetID string 
+
 @description('Azure database for MySQL pricing tier')
 @allowed([
   'Basic'
@@ -22,18 +24,45 @@ param skuName string
 ])
 param SkuTier string = 'GeneralPurpose'
 
-@description('MySQL version')
+@description('Provide Server version')
 @allowed([
-  '5.6'
   '5.7'
-  '8.0'
+  '8.0.21'
 ])
-param mysqlVersion string = '8.0'
+param serverVersion string = '8.0.21'
 
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
+@description('Provide the availability zone information of the server. (Leave blank for No Preference).')
+param availabilityZone string = '1'
+
+@description('Provide the high availability mode for a server : Disabled, SameZone, or ZoneRedundant')
+@allowed([
+  'Disabled'
+  'SameZone'
+  'ZoneRedundant'
+])
+param haEnabled string = 'ZoneRedundant'
+
+@description('Provide the availability zone of the standby server.')
+param standbyAvailabilityZone string = '2'
+
+param storageSizeGB int = 20
+param storageIops int = 360
+@allowed([
+  'Enabled'
+  'Disabled'
+])
+param storageAutogrow string = 'Enabled'
+
 param backupRetentionDays int = 7
+
+@allowed([
+  'Disabled'
+  'Enabled'
+])
+
 param geoRedundantBackup string = 'Disabled'
 
 
@@ -47,13 +76,27 @@ resource mysqlDbServer 'Microsoft.DBforMySQL/flexibleServers@2022-09-30-preview'
   }
   properties: {
     createMode: 'Default'
-    version: mysqlVersion
+    version: serverVersion
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
-    availabilityZone: '1'
+    availabilityZone: availabilityZone
+
+    highAvailability: {
+      mode: haEnabled
+      standbyAvailabilityZone: standbyAvailabilityZone
+    }
+
+    storage: {
+      storageSizeGB: storageSizeGB
+      iops: storageIops
+      autoGrow: storageAutogrow
+    }
+
     network:{
       publicNetworkAccess: 'Disabled'
+      delegatedSubnetResourceId: mysqlSubnetID
     }
+
     backup: {
       backupRetentionDays: backupRetentionDays
       geoRedundantBackup: geoRedundantBackup
