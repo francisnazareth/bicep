@@ -111,7 +111,7 @@ module vnet './modules/vnet/vnet.bicep' = {
     vmSubnetName: vmSubnetName
   }
 }
-
+/*
 module superAppAKS './modules/aks/aksSuperApp.bicep' = {
   name: aksSuperAppClusterName
   scope: spokeRG
@@ -153,6 +153,7 @@ module miniAppAKS './modules/aks/aksMiniApp.bicep' = {
     privateDNSZoneID: privateDNSZones.outputs.aksPrivateDNSZoneID
   }
 }
+*/
 
 module acr './modules/acr/acr.bicep' = {
   name: acrName

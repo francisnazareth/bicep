@@ -75,6 +75,7 @@ resource vmSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   }
 }
 
+/*
 resource aksSuperAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
   name: aksSuperAppAPISubnetName
@@ -105,7 +106,7 @@ resource aksMiniAppAPISubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-
       }
     ]
   }
-}
+}*/
 
 resource mysqlSuperAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
   parent: vnet
@@ -142,9 +143,9 @@ resource mysqlMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-0
 output vnetId string = vnet.id
 output aksSuperAppSubnetID string = aksSuperAppSubnet.id
 output peSubnetID string = peSubnet.id
-output aksSuperAppAPISubnetID string = aksSuperAppAPISubnet.id
+//output aksSuperAppAPISubnetID string = aksSuperAppAPISubnet.id
 output aksMiniAppSubnetID string = aksMiniAppSubnet.id
-output aksMiniAppAPISubnetID string = aksMiniAppAPISubnet.id
+//output aksMiniAppAPISubnetID string = aksMiniAppAPISubnet.id
 output mysqlSuperAppSubnetID string = mysqlSuperAppSubnet.id
 output mysqlMiniAppSubnetID string = mysqlMiniAppSubnet.id
 output vmSubnetID string = vmSubnet.id
