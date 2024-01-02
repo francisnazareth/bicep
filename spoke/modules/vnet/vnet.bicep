@@ -43,7 +43,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
           }
         }
       }
-   /*   {
+      {
         name: aksSuperAppAPISubnetName
         properties: {
           addressPrefix: aksSuperAppAPISubnetAddressPrefix
@@ -53,7 +53,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
             }
           ]
         }
-      }*/
+      }
       {
         name: aksMiniAppSubnetName
         properties: {
@@ -63,7 +63,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
           }
         }
       }
-     /* {
+      {
         name: aksMiniAppAPISubnetName
         properties: {
           addressPrefix: aksMiniAppAPISubnetAddressPrefix
@@ -73,7 +73,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
             }
           ]
         }
-      }*/
+      }
       {
         name: peSubnetName
         properties: {
@@ -115,19 +115,19 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       name: aksSuperAppSubnetName
   }
 
- /* resource aksSuperAppApiSubnet 'subnets' existing = {
+  resource aksSuperAppApiSubnet 'subnets' existing = {
     name: aksSuperAppAPISubnetName
-  } */
+  } 
 
   resource aksMiniAppSubnet 'subnets' existing = {
     name: aksMiniAppSubnetName
   }
 
-/*
+
   resource aksMiniAppApiSubnet 'subnets' existing = {
     name: aksMiniAppAPISubnetName
   }
-  */
+  
 
   resource peSubnet 'subnets' existing = {
     name: peSubnetName
@@ -149,9 +149,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
 output vnetId string = vnet.id
 output aksSuperAppSubnetID string = vnet::aksSuperAppSubnet.id
 output peSubnetID string = vnet::peSubnet.id
-//output aksSuperAppAPISubnetID string = vnet::aksSuperAppApiSubnet.id
+output aksSuperAppAPISubnetID string = vnet::aksSuperAppApiSubnet.id
 output aksMiniAppSubnetID string = vnet::aksMiniAppSubnet.id
-//output aksMiniAppAPISubnetID string = vnet::aksMiniAppApiSubnet.id
+output aksMiniAppAPISubnetID string = vnet::aksMiniAppApiSubnet.id
 output mysqlSuperAppSubnetID string = vnet::mysqlSuperAppSubnet.id
 output mysqlMiniAppSubnetID string = vnet::mysqlMiniAppSubnet.id
 output vmSubnetID string = vnet::vmSubnet.id
