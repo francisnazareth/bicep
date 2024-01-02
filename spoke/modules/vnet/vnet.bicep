@@ -32,55 +32,44 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         vnetAddressPrefix
       ]
     }
-
-    subnets: [
-      {
-        name: aksSuperAppSubnetName
-        properties: {
-          addressPrefix: aksSuperAppSubnetAddressPrefix
-          routeTable: {
-            id: aksRouteTableID
-          }
-        }
-      }
-      {
-        name: aksMiniAppSubnetName
-        properties: {
-          addressPrefix: aksMiniAppSubnetAddressPrefix
-          routeTable: {
-            id: aksRouteTableID
-          }
-        }
-      }
-      {
-        name: peSubnetName
-        properties: {
-          addressPrefix: peSubnetAddressPrefix
-        }
-      }
-      {
-        name: vmSubnetName
-        properties: {
-          addressPrefix: vmSubnetAddressPrefix
-        }
-      }
-    ]
   }
+}
 
-  resource aksSuperAppSubnet 'subnets' existing = {
-      name: aksSuperAppSubnetName
+resource aksSuperAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: aksSuperAppSubnetName
+  properties: {
+    addressPrefix: aksSuperAppSubnetAddressPrefix
+    routeTable: {
+      id: aksRouteTableID
+    }
   }
+}
 
-  resource aksMiniAppSubnet 'subnets' existing = {
-    name: aksMiniAppSubnetName
+resource aksMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: aksMiniAppSubnetName
+  properties: {
+    addressPrefix: aksMiniAppSubnetAddressPrefix
+    routeTable: {
+      id: aksRouteTableID
+    }
   }
+}
 
-  resource peSubnet 'subnets' existing = {
-    name: peSubnetName
+resource peSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: peSubnetName
+  properties: {
+    addressPrefix: peSubnetAddressPrefix
   }
+}
 
-  resource vmSubnet 'subnets' existing = {
-    name: vmSubnetName
+resource vmSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' = {
+  parent: vnet
+  name: vmSubnetName
+  properties: {
+    addressPrefix: vmSubnetAddressPrefix
   }
 }
 
@@ -149,14 +138,14 @@ resource mysqlMiniAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-0
 }
 
 output vnetId string = vnet.id
-output aksSuperAppSubnetID string = vnet::aksSuperAppSubnet.id
-output peSubnetID string = vnet::peSubnet.id
+output aksSuperAppSubnetID string = aksSuperAppSubnet.id
+output peSubnetID string = peSubnet.id
 output aksSuperAppAPISubnetID string = aksSuperAppAPISubnet.id
-output aksMiniAppSubnetID string = vnet::aksMiniAppSubnet.id
+output aksMiniAppSubnetID string = aksMiniAppSubnet.id
 output aksMiniAppAPISubnetID string = aksMiniAppAPISubnet.id
 output mysqlSuperAppSubnetID string = mysqlSuperAppSubnet.id
 output mysqlMiniAppSubnetID string = mysqlMiniAppSubnet.id
-output vmSubnetID string = vnet::vmSubnet.id
+output vmSubnetID string = vmSubnet.id
 output vnet object = vnet
 
 resource networkContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
