@@ -24,7 +24,8 @@ param aksSuperAppClusterName string
 param aksMiniAppClusterName string 
 param logAnalyticsWorkspaceID string 
 param acrName string 
-param storageAccountName string 
+param superAppStorageAccountName string
+param miniAppStorageAccountName string  
 param availabilityZones array 
 param mysqlSuperAppSubnetAddressPrefix string
 param mysqlSuperAppSubnetName string
@@ -164,11 +165,21 @@ module acr './modules/acr/acr.bicep' = {
   }
 }
 
-module storage './modules/storage/storage.bicep' = {
-  name: storageAccountName
+module superAppStorage './modules/storage/storage.bicep' = {
+  name: superAppStorageAccountName
   scope: spokeRG
   params: {
-    storageAccountName: storageAccountName
+    storageAccountName: superAppStorageAccountName
+    tagValues: tagValues
+    location: location
+  }
+}
+
+module miniAppStorage './modules/storage/storage.bicep' = {
+  name: miniAppStorageAccountName
+  scope: spokeRG
+  params: {
+    storageAccountName: miniAppStorageAccountName
     tagValues: tagValues
     location: location
   }
