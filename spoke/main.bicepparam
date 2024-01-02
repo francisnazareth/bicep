@@ -1,5 +1,5 @@
 using './main.bicep'
-param spokeRGName = 'rg-app1-prod-qc-02'
+param spokeRGName = 'rg-app1-prod-qc-01'
 param location = 'westeurope'
 param tagValues = {
     Environment: 'PoC'
@@ -9,7 +9,7 @@ param tagValues = {
     CreationDate: '2023-26-12'
 }
 
-param vnetName = 'vnet-app1-prod-qc-02'
+param vnetName = 'vnet-app1-prod-qc-01'
 param vnetAddressPrefix = '10.0.4.0/22'
 param aksSuperAppSubnetName = 'snet-aks-app1-prod-qc-01'
 param aksSuperAppSubnetAddressPrefix = '10.0.4.0/23'

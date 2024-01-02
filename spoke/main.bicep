@@ -47,7 +47,7 @@ resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   tags: tagValues
 }
 module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
-  name: 'managedIdentity'
+  name: aksManagedIdentityName
   scope: spokeRG
   params: {
     tagValues: tagValues
@@ -69,7 +69,7 @@ module privateDNSZones './modules/privateDNSZones/privateDNSZones.bicep' = {
   }
 }
 module aksRouteTable './modules/routeTable/routeTable.bicep' = {
-  name: 'routeTable'
+  name: aksRouteTableName
   scope: spokeRG
   params: {
     tagValues: tagValues
@@ -79,7 +79,7 @@ module aksRouteTable './modules/routeTable/routeTable.bicep' = {
   }
 }
 module vnet './modules/vnet/vnet.bicep' = {
-  name: 'vnet'
+  name: vnetName
   scope: spokeRG
   dependsOn: [
     aksRouteTable
@@ -112,7 +112,6 @@ module vnet './modules/vnet/vnet.bicep' = {
   }
 }
 
-/*
 module superAppAKS './modules/aks/aksSuperApp.bicep' = {
   name: aksSuperAppClusterName
   scope: spokeRG
@@ -123,7 +122,6 @@ module superAppAKS './modules/aks/aksSuperApp.bicep' = {
   params: {
     tagValues: tagValues
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
-    aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
     location: location
     aksAPISubnetID: vnet.outputs.aksSuperAppAPISubnetID
     aksSubnetID: vnet.outputs.aksSuperAppSubnetID
@@ -131,6 +129,7 @@ module superAppAKS './modules/aks/aksSuperApp.bicep' = {
     agentVMSize: agentVMSize
     logAnalyticsWorkspaceID: logAnalyticsWorkspaceID
     availabilityZones: availabilityZones
+    privateDNSZoneID: privateDNSZones.outputs.aksPrivateDNSZoneID
   }
 }
 
@@ -151,13 +150,12 @@ module miniAppAKS './modules/aks/aksMiniApp.bicep' = {
     agentVMSize: agentVMSize
     logAnalyticsWorkspaceID: logAnalyticsWorkspaceID
     availabilityZones: availabilityZones
-    privateDNSZoneID: superAppAKS.outputs.privateDNSZoneID
+    privateDNSZoneID: privateDNSZones.outputs.aksPrivateDNSZoneID
   }
 }
-*/
 
 module acr './modules/acr/acr.bicep' = {
-  name: 'acr'
+  name: acrName
   scope: spokeRG
   params: {
     tagValues: tagValues
@@ -167,7 +165,7 @@ module acr './modules/acr/acr.bicep' = {
 }
 
 module storage './modules/storage/storage.bicep' = {
-  name: 'storageAccount'
+  name: storageAccountName
   scope: spokeRG
   params: {
     storageAccountName: storageAccountName
@@ -177,7 +175,7 @@ module storage './modules/storage/storage.bicep' = {
 }
 
 module mysqlSuperApp './modules/mysql/mysql.bicep' = {
-  name: 'mysql-superapp'
+  name: mysqlSuperAppServerName
   scope: spokeRG
   dependsOn:[
     vnet
@@ -194,7 +192,7 @@ module mysqlSuperApp './modules/mysql/mysql.bicep' = {
 }
 
 module mysqlMiniApp './modules/mysql/mysql.bicep' = {
-  name: 'mysql-miniapp'
+  name: mysqlMiniAppServerName
   scope: spokeRG
   dependsOn:[
     vnet
