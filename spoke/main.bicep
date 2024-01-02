@@ -41,6 +41,8 @@ param mysqlAdminUsername string
 @minLength(8)
 param mysqlAdminPassword string
 param mysqlSKU string 
+param superAppRedisCacheName string 
+param miniAppRedisCacheName string
 
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
@@ -216,5 +218,27 @@ module mysqlMiniApp './modules/mysql/mysql.bicep' = {
     administratorLoginPassword: mysqlAdminPassword
     skuName: mysqlSKU
     mysqlSubnetID: vnet.outputs.mysqlMiniAppSubnetID
+  }
+}
+
+module superAppRedis './modules/redis/redis.bicep' = {
+  name: 'superAppRedis'
+  scope: spokeRG
+
+  params: {
+    tagValues: tagValues
+    location: location
+    redisCacheName: superAppRedisCacheName
+  }
+}
+
+module miniAppRedis './modules/redis/redis.bicep' = {
+  name: 'miniAppRedis'
+  scope: spokeRG
+
+  params: {
+    tagValues: tagValues
+    location: location
+    redisCacheName: miniAppRedisCacheName
   }
 }

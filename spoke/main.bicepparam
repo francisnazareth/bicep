@@ -43,3 +43,5 @@ param mysqlMiniAppSubnetName = 'snet-mysql-miniapp-prod-qc-01'
 param vmSubnetAddressPrefix = '10.0.6.128/27'
 param vmSubnetName = 'snet-vm-prod-qc-01'
 param availabilityZones = ['1','3']
+param superAppRedisCacheName = 'rediscachesuperappprodqc01'
+param miniAppRedisCacheName = 'rediscacheminiappprodqc01'
