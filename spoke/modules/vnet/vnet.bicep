@@ -47,11 +47,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: aksSuperAppAPISubnetName
         properties: {
           addressPrefix: aksSuperAppAPISubnetAddressPrefix
-          delegations: [
-            {
-              name: 'Microsoft.ContainerService/managedClusters'
-            }
-          ]
+
         }
       }
       {
@@ -67,11 +63,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: aksMiniAppAPISubnetName
         properties: {
           addressPrefix: aksMiniAppAPISubnetAddressPrefix
-          delegations: [
-            {
-              name: 'Microsoft.ContainerService/managedClusters'
-            }
-          ]
+
         }
       }
       {
@@ -84,22 +76,13 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: mysqlSuperAppSubnetName
         properties: {
           addressPrefix: mysqlSuperAppSubnetAddressPrefix
-          delegations: [
-            {
-              name: 'Microsoft.MySQL/flexibleServers'
-            }
-          ]
         }
       }
       {
         name: mysqlMiniAppSubnetName
         properties: {
           addressPrefix: mysqlMiniAppSubnetAddressPrefix
-          delegations: [
-            {
-              name: 'Microsoft.MySQL/flexibleServers'
-            }
-          ]
+      
         }
       }
       {
