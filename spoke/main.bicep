@@ -156,7 +156,6 @@ module miniAppAKS './modules/aks/aksMiniApp.bicep' = {
 }
 */
 
-/*
 module acr './modules/acr/acr.bicep' = {
   name: 'acr'
   scope: spokeRG
@@ -176,6 +175,7 @@ module storage './modules/storage/storage.bicep' = {
     location: location
   }
 }
+
 module mysqlSuperApp './modules/mysql/mysql.bicep' = {
   name: 'mysql-superapp'
   scope: spokeRG
@@ -192,7 +192,6 @@ module mysqlSuperApp './modules/mysql/mysql.bicep' = {
     mysqlSubnetID: vnet.outputs.mysqlSuperAppSubnetID
   }
 }
-*/
 
 module mysqlMiniApp './modules/mysql/mysql.bicep' = {
   name: 'mysql-miniapp'
