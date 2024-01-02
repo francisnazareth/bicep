@@ -9,8 +9,10 @@ param aksSuperAppAPISubnetName string
 param aksSuperAppAPISubnetAddressPrefix string
 param aksMiniAppAPISubnetName string
 param aksMiniAppAPISubnetAddressPrefix string
-param mysqlSubnetName string 
-param mysqlSubnetAddressPrefix string
+param mysqlSuperAppSubnetName string 
+param mysqlSuperAppSubnetAddressPrefix string
+param mysqlMiniAppSubnetName string
+param mysqlMiniAppSubnetAddressPrefix string
 param vmSubnetName string
 param vmSubnetAddressPrefix string 
 param peSubnetName string
@@ -79,9 +81,25 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         }
       }
       {
-        name: mysqlSubnetName
+        name: mysqlSuperAppSubnetName
         properties: {
-          addressPrefix: mysqlSubnetAddressPrefix
+          addressPrefix: mysqlSuperAppSubnetAddressPrefix
+          delegations: [
+            {
+              name: 'Microsoft.MySQL/flexibleServers'
+            }
+          ]
+        }
+      }
+      {
+        name: mysqlMiniAppSubnetName
+        properties: {
+          addressPrefix: mysqlMiniAppSubnetAddressPrefix
+          delegations: [
+            {
+              name: 'Microsoft.MySQL/flexibleServers'
+            }
+          ]
         }
       }
       {
@@ -113,8 +131,12 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
     name: peSubnetName
   }
 
-  resource mySQLSubnet 'subnets' existing = {
-    name: mysqlSubnetName
+  resource mysqlSuperAppSubnet 'subnets' existing = {
+    name: mysqlSuperAppSubnetName
+  }
+
+  resource mysqlMiniAppSubnet 'subnets' existing = {
+    name: mysqlMiniAppSubnetName
   }
 
   resource vmSubnet 'subnets' existing = {
@@ -128,7 +150,8 @@ output peSubnetID string = vnet::peSubnet.id
 output aksSuperAppAPISubnetID string = vnet::aksSuperAppApiSubnet.id
 output aksMiniAppSubnetID string = vnet::aksMiniAppSubnet.id
 output aksMiniAppAPISubnetID string = vnet::aksMiniAppApiSubnet.id
-output mySQLSubnetID string = vnet::mySQLSubnet.id
+output mysqlSuperAppSubnetID string = vnet::mysqlSuperAppSubnet.id
+output mysqlMiniAppSubnetID string = vnet::mysqlMiniAppSubnet.id
 output vmSubnetID string = vnet::vmSubnet.id
 output vnet object = vnet
 

@@ -26,8 +26,10 @@ param logAnalyticsWorkspaceID string
 param acrName string 
 param storageAccountName string 
 param availabilityZones array 
-param mysqlSubnetAddressPrefix string
-param mysqlSubnetName string
+param mysqlSuperAppSubnetAddressPrefix string
+param mysqlSuperAppSubnetName string
+param mysqlMiniAppSubnetAddressPrefix string
+param mysqlMiniAppSubnetName string
 param vmSubnetAddressPrefix string 
 param vmSubnetName string 
 
@@ -51,6 +53,19 @@ module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
     tagValues: tagValues
     location: location
     aksManagedIdentityName: aksManagedIdentityName
+  }
+}
+
+module privateDNSZones './modules/privateDNSZones/privateDNSZones.bicep' = {
+  name: 'privateDNSZones'
+  scope: spokeRG
+  dependsOn: [
+    managedIdentity
+  ]
+  params: {
+    tagValues: tagValues
+    aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
+    aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
   }
 }
 module aksRouteTable './modules/routeTable/routeTable.bicep' = {
@@ -88,8 +103,10 @@ module vnet './modules/vnet/vnet.bicep' = {
     aksRouteTableID: aksRouteTable.outputs.routeTableId
     aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
-    mysqlSubnetAddressPrefix: mysqlSubnetAddressPrefix
-    mysqlSubnetName: mysqlSubnetName 
+    mysqlSuperAppSubnetAddressPrefix: mysqlSuperAppSubnetAddressPrefix
+    mysqlSuperAppSubnetName: mysqlSuperAppSubnetName 
+    mysqlMiniAppSubnetAddressPrefix: mysqlMiniAppSubnetAddressPrefix
+    mysqlMiniAppSubnetName: mysqlMiniAppSubnetName
     vmSubnetAddressPrefix: vmSubnetAddressPrefix
     vmSubnetName: vmSubnetName
   }
@@ -158,14 +175,26 @@ module storage './modules/storage/storage.bicep' = {
     location: location
   }
 }
-
-module mysql './modules/mysql/mysql.bicep' = {
+module mysqlSuperApp './modules/mysql/mysql.bicep' = {
   name: 'mysql-superapp'
   scope: spokeRG
   params: {
     tagValues: tagValues
     location: location
     serverName: mysqlSuperAppServerName
+    administratorLogin: mysqlAdminUsername
+    administratorLoginPassword: mysqlAdminPassword
+    skuName: mysqlSKU
+  }
+}
+
+module mysqlMiniApp './modules/mysql/mysql.bicep' = {
+  name: 'mysql-miniapp'
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    serverName: mysqlMiniAppServerName
     administratorLogin: mysqlAdminUsername
     administratorLoginPassword: mysqlAdminPassword
     skuName: mysqlSKU
