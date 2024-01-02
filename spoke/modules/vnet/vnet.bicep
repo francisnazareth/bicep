@@ -45,6 +45,11 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: aksSuperAppAPISubnetName
         properties: {
           addressPrefix: aksSuperAppAPISubnetAddressPrefix
+          delegations: [
+            {
+              name: 'Microsoft.ContainerService/managedClusters'
+            }
+          ]
         }
       }
       {
@@ -60,6 +65,11 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: aksMiniAppAPISubnetName
         properties: {
           addressPrefix: aksMiniAppAPISubnetAddressPrefix
+          delegations: [
+            {
+              name: 'Microsoft.ContainerService/managedClusters'
+            }
+          ]
         }
       }
       {
