@@ -1,12 +1,12 @@
 using './main.bicep'
 param spokeRGName = 'rg-app1-prod-qc-01'
-param location = 'westeurope'
+param location = 'qatarcentral'
 param tagValues = {
-    Environment: 'PoC'
+    Environment: 'PROD'
     CostCenter: 'IT'
-    Project: 'super app'
+    Project: 'App1'
     CreatedBy: 'bicep'
-    CreationDate: '2023-26-12'
+    CreationDate: '2024-JAN-03'
 }
 
 param vnetName = 'vnet-app1-prod-qc-01'
@@ -42,15 +42,15 @@ param aksSuperAppClusterName = 'aks-app1-prod-qc-01'
 param aksMiniAppClusterName = 'aks-miniapp-prod-qc-01'
 param agentVMSize = 'Standard_D2s_v3'
 param logAnalyticsWorkspaceID = '/subscriptions/cb56ce60-e634-4951-8ac8-ec94c671d4e8/resourceGroups/rg-monitoring-cust-hub-qc-01/providers/Microsoft.OperationalInsights/workspaces/law-cust-hub-qc-01'
-param acrName = 'acrapp1pocqc01'
+param acrName = 'acrapp1prodqc01'
 param superAppStorageAccountName = 'stsuperappprodqc01'
 param miniAppStorageAccountName = 'stminiappprodqc01'
-param mysqlSuperAppServerName = 'mysqlapp1pocqc01'
-param mysqlMiniAppServerName = 'mysqlminiapppocqc01'
-param mysqlAdminUsername = 'app1pocqc01'
+param mysqlSuperAppServerName = 'mysqlapp1prodcqc01'
+param mysqlMiniAppServerName = 'mysqlminiappprodqc01'
+param mysqlAdminUsername = 'app1prodqc01'
 param mysqlAdminPassword = 'app1PoCqc01!23425'
 param mysqlSKU = 'Standard_D2ds_v4'
 
-param availabilityZones = ['1','3']
+param availabilityZones = ['2','3']
 param superAppRedisCacheName = 'rediscachesuperappprodqc01'
 param miniAppRedisCacheName = 'rediscacheminiappprodqc01'
