@@ -52,4 +52,4 @@ param vpnGatewayName = 'vgw-cust-hub-qc-01'
 param vpnGatewayPublicIP = 'publicip-vgw-cust-hub-qc-01'
 param vpnGatewayTier = 'VpnGw2AZ'
 param vmRouteTableName = 'rt-jumpserver-cust-hub-qc-01'
-param aksAddressRange = ['10.0.4.0/23', '10.0.6.0/28', '10.0.7.0/24', '10.0.6.16/28']
+param aksAddressRange = ['10.0.4.0/23', '10.0.6.0/27', '10.0.7.0/24', '10.0.6.32/27']
