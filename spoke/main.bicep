@@ -43,6 +43,7 @@ param mysqlAdminPassword string
 param mysqlSKU string 
 param superAppRedisCacheName string 
 param miniAppRedisCacheName string
+param mongoDBAccountName string 
 
 /* Create resource group where all assets will be deployed*/
 
@@ -261,7 +262,7 @@ module mongoDB './modules/mongodb/mongodb.bicep' = {
   params: {
     tagValues: tagValues
     location: location
-    accountName: 'mongosuperapppocqc01'
+    accountName: mongoDBAccountName
     databaseName: 'superappdb'
     collection1Name: 'superappcollection1'
     collection2Name: 'superappcollection2'
