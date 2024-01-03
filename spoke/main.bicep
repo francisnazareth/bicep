@@ -89,6 +89,8 @@ module aksRouteTable './modules/routeTable/routeTable.bicep' = {
   }
 }
 
+param vmNSGName string 
+
 /* VNET and necessary subnets */
 module vnet './modules/vnet/vnet.bicep' = {
   name: vnetName
@@ -101,6 +103,7 @@ module vnet './modules/vnet/vnet.bicep' = {
     tagValues: tagValues
     location: location
     vnetName: vnetName
+    vmNSGName: vmNSGName
     vnetAddressPrefix: vnetAddressPrefix
     aksSuperAppSubnetName: aksSuperAppSubnetName
     aksSuperAppSubnetAddressPrefix: aksSuperAppSubnetAddressPrefix
@@ -264,5 +267,26 @@ module mongoDB './modules/mongodb/mongodb.bicep' = {
     collection2Name: 'superappcollection2'
     primaryRegion: 'qatarcentral'
     secondaryRegion: 'westeurope'
+  }
+}
+
+@secure()
+param vmName string
+param vmSize string 
+param adminUsername string
+@secure()
+param adminPassword string
+
+module vm './modules/vm/vm.bicep' = {
+  name: 'vm'
+  scope: spokeRG
+  params: {
+    location: location
+    tagValues: tagValues
+    managementSubnetID: vnet.outputs.vmSubnetID
+    vmName: vmName
+    vmSize: vmSize
+    adminUsername: adminUsername
+    adminPassword: adminPassword
   }
 }
