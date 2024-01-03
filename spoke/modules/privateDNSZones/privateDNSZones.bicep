@@ -9,6 +9,12 @@ resource aksPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   tags: tagValues
 }
 
+resource mysqlPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.mysql.database.azure.com'
+  location: 'global'
+  tags: tagValues
+}
+
 output aksPrivateDNSZoneID string = aksPrivateDNSZone.id
 
 resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {

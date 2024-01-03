@@ -44,11 +44,15 @@ param mysqlSKU string
 param superAppRedisCacheName string 
 param miniAppRedisCacheName string
 
+/* Create resource group where all assets will be deployed*/
+
 resource spokeRG 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: spokeRGName
   location: location
   tags: tagValues
 }
+
+/* Create user assigned managed identity*/
 module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
   name: aksManagedIdentityName
   scope: spokeRG
@@ -59,6 +63,7 @@ module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
   }
 }
 
+/*Create necessary private DNS Zones*/
 module privateDNSZones './modules/privateDNSZones/privateDNSZones.bicep' = {
   name: 'privateDNSZones'
   scope: spokeRG
@@ -71,6 +76,8 @@ module privateDNSZones './modules/privateDNSZones/privateDNSZones.bicep' = {
     aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
   }
 }
+
+/* Route table to be attached to AKS Subnets, to route all outbound traffic to Firewall private IP*/
 module aksRouteTable './modules/routeTable/routeTable.bicep' = {
   name: aksRouteTableName
   scope: spokeRG
@@ -81,6 +88,8 @@ module aksRouteTable './modules/routeTable/routeTable.bicep' = {
     firewallPrivateIP: firewallPrivateIP
   }
 }
+
+/* VNET and necessary subnets */
 module vnet './modules/vnet/vnet.bicep' = {
   name: vnetName
   scope: spokeRG
@@ -240,5 +249,20 @@ module miniAppRedis './modules/redis/redis.bicep' = {
     tagValues: tagValues
     location: location
     redisCacheName: miniAppRedisCacheName
+  }
+}
+
+module mongoDB './modules/mongodb/mongodb.bicep' = {
+  name: 'mongoDB'
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    accountName: 'mongosuperapppocqc01'
+    databaseName: 'superappdb'
+    collection1Name: 'superappcollection1'
+    collection2Name: 'superappcollection2'
+    primaryRegion: 'qatarcentral'
+    secondaryRegion: 'westeurope'
   }
 }
