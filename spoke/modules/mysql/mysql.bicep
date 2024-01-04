@@ -1,6 +1,8 @@
 @description('Server Name for Azure database for MySQL')
 param serverName string
 
+//param peSubnetID string
+
 param tagValues object
 @description('Database administrator login name')
 @minLength(1)
@@ -103,3 +105,25 @@ resource mysqlDbServer 'Microsoft.DBforMySQL/flexibleServers@2022-09-30-preview'
     }
   }
 }
+
+/*resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
+  name: 'pe-${serverName}'
+  location: location
+  properties: {
+    subnet: {
+      id: peSubnetID
+    }
+    privateLinkServiceConnections: [
+      {
+        name: 'pe-${serverName}'
+        properties: {
+          privateLinkServiceId: mysqlDbServer.id
+          groupIds: [
+            'blob'
+          ]
+        }
+      }
+    ]
+  }
+}
+*/

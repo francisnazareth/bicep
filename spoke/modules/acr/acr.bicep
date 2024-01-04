@@ -3,6 +3,7 @@
 @description('Provide a globally unique name of your Azure Container Registry')
 param acrName string 
 param tagValues object 
+param peSubnetID string 
 @description('Provide a location for the registry.')
 param location string = resourceGroup().location
 
@@ -18,6 +19,28 @@ resource acrResource 'Microsoft.ContainerRegistry/registries@2023-01-01-preview'
   }
   properties: {
     adminUserEnabled: false
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
+  name: 'pe-${acrName}'
+  location: location
+  properties: {
+    subnet: {
+      id: peSubnetID
+    }
+    privateLinkServiceConnections: [
+      {
+        name: 'pe-${acrName}'
+        properties: {
+          privateLinkServiceId: acrResource.id
+          groupIds: [
+            'registry'
+          ]
+        }
+      }
+    ]
   }
 }
 

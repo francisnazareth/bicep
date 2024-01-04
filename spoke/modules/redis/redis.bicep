@@ -1,6 +1,6 @@
 @description('Specify the name of the Azure Redis Cache to create.')
 param redisCacheName string 
-
+param peSubnetID string
 param tagValues object 
 
 @description('Location of all resources')
@@ -65,6 +65,27 @@ resource redisCache 'Microsoft.Cache/Redis@2020-06-01' = {
       family: redisCacheFamily
       name: redisCacheSKU
     }
+  }
+}
+
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
+  name: 'pe-${redisCacheName}'
+  location: location
+  properties: {
+    subnet: {
+      id: peSubnetID
+    }
+    privateLinkServiceConnections: [
+      {
+        name: 'pe-${redisCacheName}'
+        properties: {
+          privateLinkServiceId: redisCache.id
+          groupIds: [
+            'redisCache'
+          ]
+        }
+      }
+    ]
   }
 }
 

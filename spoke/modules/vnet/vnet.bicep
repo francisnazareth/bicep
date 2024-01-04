@@ -78,6 +78,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: peSubnetName
         properties: {
           addressPrefix: peSubnetAddressPrefix
+          privateEndpointNetworkPolicies: 'Disabled'
         }
       }
       {

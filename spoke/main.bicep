@@ -33,7 +33,7 @@ param mysqlMiniAppSubnetAddressPrefix string
 param mysqlMiniAppSubnetName string
 param vmSubnetAddressPrefix string 
 param vmSubnetName string 
-
+param hubVNETID string 
 param mysqlSuperAppServerName string
 param mysqlMiniAppServerName string 
 param mysqlAdminUsername string
@@ -61,20 +61,6 @@ module managedIdentity './modules/managedIdentity/managedIdentity.bicep' = {
     tagValues: tagValues
     location: location
     aksManagedIdentityName: aksManagedIdentityName
-  }
-}
-
-/*Create necessary private DNS Zones*/
-module privateDNSZones './modules/privateDNSZones/privateDNSZones.bicep' = {
-  name: 'privateDNSZones'
-  scope: spokeRG
-  dependsOn: [
-    managedIdentity
-  ]
-  params: {
-    tagValues: tagValues
-    aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
-    aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
   }
 }
 
@@ -128,6 +114,56 @@ module vnet './modules/vnet/vnet.bicep' = {
   }
 }
 
+/*Create necessary private DNS Zones*/
+module privateDNSZones './modules/privateDNSZones/privateDNSZones.bicep' = {
+  name: 'privateDNSZones'
+  scope: spokeRG
+  dependsOn: [
+    managedIdentity
+    vnet
+  ]
+  params: {
+    tagValues: tagValues
+    aksManagedIdentityID: managedIdentity.outputs.aksManagedIdentityResourceID
+    aksManagedIdentityPrincipalID: managedIdentity.outputs.aksManagedIdentityPrincipalID
+    hubVNETID: hubVNETID
+    spokeVNETID: vnet.outputs.vnetId
+  }
+}
+
+module acr './modules/acr/acr.bicep' = {
+  name: acrName
+  scope: spokeRG
+  params: {
+    tagValues: tagValues
+    location: location
+    acrName: acrName
+    peSubnetID: vnet.outputs.peSubnetID
+  }
+}
+
+module superAppStorage './modules/storage/storage.bicep' = {
+  name: superAppStorageAccountName
+  scope: spokeRG
+  params: {
+    storageAccountName: superAppStorageAccountName
+    tagValues: tagValues
+    location: location
+    peSubnetID: vnet.outputs.peSubnetID
+  }
+}
+
+module miniAppStorage './modules/storage/storage.bicep' = {
+  name: miniAppStorageAccountName
+  scope: spokeRG
+  params: {
+    storageAccountName: miniAppStorageAccountName
+    tagValues: tagValues
+    location: location
+    peSubnetID: vnet.outputs.peSubnetID
+  }
+}
+
 module superAppAKS './modules/aks/aksSuperApp.bicep' = {
   name: aksSuperAppClusterName
   scope: spokeRG
@@ -170,35 +206,7 @@ module miniAppAKS './modules/aks/aksMiniApp.bicep' = {
   }
 }
 
-module acr './modules/acr/acr.bicep' = {
-  name: acrName
-  scope: spokeRG
-  params: {
-    tagValues: tagValues
-    location: location
-    acrName: acrName
-  }
-}
 
-module superAppStorage './modules/storage/storage.bicep' = {
-  name: superAppStorageAccountName
-  scope: spokeRG
-  params: {
-    storageAccountName: superAppStorageAccountName
-    tagValues: tagValues
-    location: location
-  }
-}
-
-module miniAppStorage './modules/storage/storage.bicep' = {
-  name: miniAppStorageAccountName
-  scope: spokeRG
-  params: {
-    storageAccountName: miniAppStorageAccountName
-    tagValues: tagValues
-    location: location
-  }
-}
 
 module mysqlSuperApp './modules/mysql/mysql.bicep' = {
   name: mysqlSuperAppServerName
@@ -235,29 +243,31 @@ module mysqlMiniApp './modules/mysql/mysql.bicep' = {
 }
 
 module superAppRedis './modules/redis/redis.bicep' = {
-  name: 'superAppRedis'
+  name: superAppRedisCacheName
   scope: spokeRG
 
   params: {
     tagValues: tagValues
     location: location
     redisCacheName: superAppRedisCacheName
+    peSubnetID: vnet.outputs.peSubnetID
   }
 }
 
 module miniAppRedis './modules/redis/redis.bicep' = {
-  name: 'miniAppRedis'
+  name: miniAppRedisCacheName
   scope: spokeRG
 
   params: {
     tagValues: tagValues
     location: location
     redisCacheName: miniAppRedisCacheName
+    peSubnetID: vnet.outputs.peSubnetID
   }
 }
 
 module mongoDB './modules/mongodb/mongodb.bicep' = {
-  name: 'mongoDB'
+  name: mongoDBAccountName
   scope: spokeRG
   params: {
     tagValues: tagValues
@@ -279,7 +289,7 @@ param adminUsername string
 param adminPassword string
 
 module vm './modules/vm/vm.bicep' = {
-  name: 'vm'
+  name: vmName
   scope: spokeRG
   params: {
     location: location

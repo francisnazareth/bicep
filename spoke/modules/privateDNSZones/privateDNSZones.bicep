@@ -1,7 +1,8 @@
-
 param tagValues object 
 param aksManagedIdentityID string
 param aksManagedIdentityPrincipalID string
+param hubVNETID string
+param spokeVNETID string 
 
 resource aksPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.qatarcentral.azmk8s.io'
@@ -15,7 +16,180 @@ resource mysqlPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   tags: tagValues
 }
 
+resource acrPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.azurecr.io'
+  location: 'global'
+  tags: tagValues
+}
+
+resource mongodbPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.mongo.cosmos.azure.com'
+  location: 'global'
+  tags: tagValues
+}
+
+resource redisPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.redis.cache.windows.net'
+  location: 'global'
+  tags: tagValues
+}
+
+resource blobPrivateDNSZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.blob.core.windows.net'
+  location: 'global'
+  tags: tagValues
+}
+
+resource aksHubPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: aksPrivateDNSZone
+  name: 'aks-privatednszone-hub-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: hubVNETID
+    }
+  }
+}
+
+resource aksSpokePrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: aksPrivateDNSZone
+  name: 'aks-privatednszone-prod-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: spokeVNETID
+    }
+  }
+}
+
+resource mysqlHubPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: mysqlPrivateDNSZone
+  name: 'mysql-privatednszone-hub-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: hubVNETID
+    }
+  }
+}
+
+resource mysqlSpokePrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: mysqlPrivateDNSZone
+  name: 'mysql-privatednszone-prod-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: spokeVNETID
+    }
+  }
+}
+
+resource acrHubPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: acrPrivateDNSZone
+  name: 'acr-privatednszone-hub-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: hubVNETID
+    }
+  }
+}
+
+resource acrSpokePrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: acrPrivateDNSZone
+  name: 'acr-privatednszone-prod-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: spokeVNETID
+    }
+  }
+}
+
+resource mongodbHubPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: mongodbPrivateDNSZone
+  name: 'mongodb-privatednszone-hub-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: hubVNETID
+    }
+  }
+}
+
+resource mongodbSpokePrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: mongodbPrivateDNSZone
+  name: 'mongodb-privatednszone-prod-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: spokeVNETID
+    }
+  }
+}
+
+resource redisHubPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: redisPrivateDNSZone
+  name: 'redis-privatednszone-hub-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: hubVNETID
+    }
+  }
+}
+
+resource redisSpokePrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: redisPrivateDNSZone
+  name: 'redis-privatednszone-prod-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: spokeVNETID
+    }
+  }
+}
+
+resource blobHubPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: blobPrivateDNSZone
+  name: 'blob-privatednszone-hub-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: hubVNETID
+    }
+  }
+}
+
+resource blobSpokePrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: blobPrivateDNSZone
+  name: 'blob-privatednszone-prod-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: spokeVNETID
+    }
+  }
+}
+
 output aksPrivateDNSZoneID string = aksPrivateDNSZone.id
+output mysqlPrivateDNSZoneID string = mysqlPrivateDNSZone.id
+output acrPrivateDNSZoneID string = acrPrivateDNSZone.id
+output mongodbPrivateDNSZoneID string = mongodbPrivateDNSZone.id
+output redisPrivateDNSZoneID string = redisPrivateDNSZone.id
+output blobPrivateDNSZoneID string = blobPrivateDNSZone.id
 
 resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: resourceGroup()
