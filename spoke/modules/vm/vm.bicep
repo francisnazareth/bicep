@@ -5,7 +5,7 @@ param vmSize string
 param adminUsername string
 @secure()
 param adminPassword string
-param vmCount int = 1
+param vmCount int = 3
 param tagValues object 
 
 
@@ -56,30 +56,65 @@ resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in rang
   }
 }]
 
-resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = [for i in range(0, vmCount): {
+var securityProfileJson = {
+  uefiSettings: {
+    secureBootEnabled: true
+    vTpmEnabled: true
+  }
+  securityType: securityType
+}
+
+
+@description('Security Type of the Virtual Machine.')
+@allowed([
+  'Standard'
+  'TrustedLaunch'
+])
+param securityType string = 'TrustedLaunch'
+
+var imageReference = {
+  'Ubuntu-1804': {
+    publisher: 'Canonical'
+    offer: 'UbuntuServer'
+    sku: '18_04-lts-gen2'
+    version: 'latest'
+  }
+  'Ubuntu-2004': {
+    publisher: 'Canonical'
+    offer: '0001-com-ubuntu-server-focal'
+    sku: '20_04-lts-gen2'
+    version: 'latest'
+  }
+  'Ubuntu-2204': {
+    publisher: 'Canonical'
+    offer: '0001-com-ubuntu-server-jammy'
+    sku: '22_04-lts-gen2'
+    version: 'latest'
+  }
+}
+
+var osDiskType = 'Standard_LRS'
+
+@description('The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version.')
+@allowed([
+  'Ubuntu-1804'
+  'Ubuntu-2004'
+  'Ubuntu-2204'
+])
+param ubuntuOSVersion string = 'Ubuntu-2204'
+
+resource linuxVM 'Microsoft.Compute/virtualMachines@2021-11-01' = [for i in range(0, vmCount):  {
   name: '${vmName}${i}'
   location: location
-  tags: tagValues
   properties: {
     hardwareProfile: {
       vmSize: vmSize
     }
-    osProfile: {
-      computerName: '${vmName}${i}'
-      adminUsername: adminUsername
-      adminPassword: adminPassword
-    }
     storageProfile: {
-      imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: OSVersion
-        version: 'latest'
-      }
       osDisk: {
         createOption: 'FromImage'
         managedDisk: {
-          storageAccountType: 'StandardSSD_LRS'
+          storageAccountType: osDiskType
         }
       }
       dataDisks: [
@@ -89,6 +124,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = [for i in range(0, 
           createOption: 'Empty'
         }
       ]
+      imageReference: imageReference[ubuntuOSVersion]
     }
     networkProfile: {
       networkInterfaces: [
@@ -97,11 +133,41 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = [for i in range(0, 
         }
       ]
     }
-    diagnosticsProfile: {
-      bootDiagnostics: {
-        enabled: false
+    osProfile: {
+      computerName: '${vmName}${i}'
+      adminUsername: adminUsername
+      adminPassword: adminPassword
+      linuxConfiguration:  null 
+    }
+    securityProfile: ((securityType == 'TrustedLaunch') ? securityProfileJson : null)
+  }
+}
+]
+
+var extensionName = 'GuestAttestation'
+var extensionPublisher = 'Microsoft.Azure.Security.LinuxAttestation'
+var extensionVersion = '1.0'
+var maaTenantName = 'GuestAttestation'
+var maaEndpoint = substring('emptystring', 0, 0)
+
+resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' = [for i in range(0, vmCount):  if ((securityType == 'TrustedLaunch') && ((securityProfileJson.uefiSettings.secureBootEnabled == true) && (securityProfileJson.uefiSettings.vTpmEnabled == true))) {
+  parent: linuxVM[i]
+  name: extensionName
+  location: location
+  properties: {
+    publisher: extensionPublisher
+    type: extensionName
+    typeHandlerVersion: extensionVersion
+    autoUpgradeMinorVersion: true
+    enableAutomaticUpgrade: true
+    settings: {
+      AttestationConfig: {
+        MaaSettings: {
+          maaEndpoint: maaEndpoint
+          maaTenantName: maaTenantName
+        }
       }
     }
   }
-}]
-
+}
+]
