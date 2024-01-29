@@ -37,7 +37,7 @@ param tagValues object
 ])
 param OSVersion string = '2022-datacenter-azure-edition'
 
-resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in range(0, vmCount): {
+resource vmNic 'Microsoft.Network/networkInterfaces@2022-07-01' = [for i in range(1, vmCount+1): {
   name: '${vmName}-nic-${i}'
   location: location
   tags: tagValues
