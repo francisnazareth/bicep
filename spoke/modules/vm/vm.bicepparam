@@ -8,7 +8,7 @@ param tagValues = {
     CreationDate: '2024-JAN-03'
 }
 
-param vmName = 'relaywinvm'
+param vmName = 'relaylinuxvm'
 param vmSize = 'Standard_D2s_v3'
 param adminUsername = 'adminuser'
 param adminPassword = 'P@ssw0rd123!'
